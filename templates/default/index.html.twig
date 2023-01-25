@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Description</th>
+                <th>Date de publication</th>
+                <th></th>
+            </tr>
+        </thead>
+        {% for book in books %}
+            <tr>
+                <td>{{ book.name }}</td>
+                <td>{{ book.description }}</td>
+                <td>{{ book.publishDate|date('d/m/Y') }}</td>
+                <td>
+                    <a href="{{ path('default_show', {'id': book.id}) }}">Voir</a>
+                    <a href="{{ path('default_update', {'id': book.id}) }}">Modifier</a>
+                    <a href="{{ path('default_delete', {'id': book.id, 'token': csrf_token('delete' ~ book.id)}) }}">Supprimer</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Pas de livre enregistré</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

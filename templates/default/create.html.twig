@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil{% endblock %}
+
+{% block body %}
+    {{ form_start(form) }}
+        {{ form_rest(form) }}
+        <input type="submit" value="Créer">
+    {{ form_end(form) }}
+{% endblock %}
