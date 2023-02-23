@@ -18,6 +18,10 @@
         </tbody>
     </table>
 
+    {% for question in quizz.questions %}
+        {{ question.question }} <br><br>
+    {% endfor %}
+
     <a href="{{ path('app_quizz_index') }}">back to list</a>
 
     <a href="{{ path('app_quizz_edit', {'id': quizz.id}) }}">edit</a>
