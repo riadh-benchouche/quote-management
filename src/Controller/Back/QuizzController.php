@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Back;
 
 use App\Entity\Quizz;
 use App\Form\QuizzType;
@@ -17,7 +17,7 @@ class QuizzController extends AbstractController
     #[Route('/', name: 'app_quizz_index', methods: ['GET'])]
     public function index(QuizzRepository $quizzRepository): Response
     {
-        return $this->render('quizz/index.html.twig', [
+        return $this->render('back/quizz/index.html.twig', [
             'quizzs' => $quizzRepository->findBy([], ['position' => 'ASC']),
         ]);
     }
@@ -32,10 +32,10 @@ class QuizzController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $quizzRepository->save($quizz, true);
 
-            return $this->redirectToRoute('app_quizz_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('back_app_quizz_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('quizz/new.html.twig', [
+        return $this->renderForm('back/quizz/new.html.twig', [
             'quizz' => $quizz,
             'form' => $form,
         ]);
@@ -44,7 +44,7 @@ class QuizzController extends AbstractController
     #[Route('/{slug}', name: 'app_quizz_show', methods: ['GET'])]
     public function show(Quizz $quizz): Response
     {
-        return $this->render('quizz/show.html.twig', [
+        return $this->render('back/quizz/show.html.twig', [
             'quizz' => $quizz,
         ]);
     }
@@ -58,10 +58,10 @@ class QuizzController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $quizzRepository->save($quizz, true);
 
-            return $this->redirectToRoute('app_quizz_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('back_app_quizz_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('quizz/edit.html.twig', [
+        return $this->renderForm('back/quizz/edit.html.twig', [
             'quizz' => $quizz,
             'form' => $form,
         ]);
@@ -77,7 +77,7 @@ class QuizzController extends AbstractController
         }
 
         $manager->flush();
-        return $this->redirectToRoute('app_quizz_index');
+        return $this->redirectToRoute('back_app_quizz_index');
     }
 
     #[Route('/{slug}', name: 'app_quizz_delete', methods: ['POST'])]
@@ -87,6 +87,6 @@ class QuizzController extends AbstractController
             $quizzRepository->remove($quizz, true);
         }
 
-        return $this->redirectToRoute('app_quizz_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('back_app_quizz_index', [], Response::HTTP_SEE_OTHER);
     }
 }

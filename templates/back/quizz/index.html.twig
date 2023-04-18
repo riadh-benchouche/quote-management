@@ -19,10 +19,10 @@
                 <td>{{ quizz.id }}</td>
                 <td>{{ quizz.name }}</td>
                 <td>
-                    <a href="{{ path('app_quizz_show', {'slug': quizz.slug}) }}">show</a>
-                    <a href="{{ path('app_quizz_edit', {'slug': quizz.slug}) }}">edit</a>
-                    {% if not loop.first %}<a href="{{ path('app_quizz_change_position', {'slug': quizz.slug, 'order': 'up'}) }}">up</a>{% endif %}
-                    {% if not loop.last %}<a href="{{ path('app_quizz_change_position', {'slug': quizz.slug, 'order': 'down'}) }}">down</a>{% endif %}
+                    <a href="{{ path('back_app_quizz_show', {'slug': quizz.slug}) }}">show</a>
+                    <a href="{{ path('back_app_quizz_edit', {'slug': quizz.slug}) }}">edit</a>
+                    {% if not loop.first %}<a href="{{ path('back_app_quizz_change_position', {'slug': quizz.slug, 'order': 'up'}) }}">up</a>{% endif %}
+                    {% if not loop.last %}<a href="{{ path('back_app_quizz_change_position', {'slug': quizz.slug, 'order': 'down'}) }}">down</a>{% endif %}
                 </td>
             </tr>
         {% else %}
@@ -33,5 +33,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_quizz_new') }}">Create new</a>
+    <a href="{{ path('back_app_quizz_new') }}">Create new</a>
 {% endblock %}
