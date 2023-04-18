@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Quizz;
 use App\Form\QuizzType;
 use App\Repository\QuizzRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +18,7 @@ class QuizzController extends AbstractController
     public function index(QuizzRepository $quizzRepository): Response
     {
         return $this->render('quizz/index.html.twig', [
-            'quizzs' => $quizzRepository->findAll(),
+            'quizzs' => $quizzRepository->findBy([], ['position' => 'ASC']),
         ]);
     }
 
@@ -64,6 +65,19 @@ class QuizzController extends AbstractController
             'quizz' => $quizz,
             'form' => $form,
         ]);
+    }
+
+    #[Route('/{slug}/change-position/{order}', name: 'app_quizz_change_position', requirements: ['position' => 'up|down'], methods: ['GET'])]
+    public function changePosition(Quizz $quizz, string $order, EntityManagerInterface $manager)
+    {
+        if ($order === 'up') {
+            $quizz->setPosition($quizz->getPosition()-1);
+        } else {
+            $quizz->setPosition($quizz->getPosition()+1);
+        }
+
+        $manager->flush();
+        return $this->redirectToRoute('app_quizz_index');
     }
 
     #[Route('/{slug}', name: 'app_quizz_delete', methods: ['POST'])]

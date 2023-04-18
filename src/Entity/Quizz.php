@@ -25,6 +25,10 @@ class Quizz
     #[Gedmo\Slug(fields: ['name'], unique: true)]
     private ?string $slug = null;
 
+    #[ORM\Column(type: 'integer', nullable: true)]
+    #[Gedmo\SortablePosition]
+    private ?int $position = null;
+
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'quizz')]
     private Collection $categories;
 
@@ -69,6 +73,24 @@ class Quizz
     public function setSlug(?string $slug): Quizz
     {
         $this->slug = $slug;
+        return $this;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getPosition(): ?int
+    {
+        return $this->position;
+    }
+
+    /**
+     * @param int|null $position
+     * @return Quizz
+     */
+    public function setPosition(?int $position): Quizz
+    {
+        $this->position = $position;
         return $this;
     }
 
