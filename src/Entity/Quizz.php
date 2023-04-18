@@ -6,10 +6,13 @@ use App\Repository\QuizzRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: QuizzRepository::class)]
 class Quizz
 {
+    use Traits\TimestampableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -18,10 +21,14 @@ class Quizz
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\Column(length: 255)]
+    #[Gedmo\Slug(fields: ['name'], unique: true)]
+    private ?string $slug = null;
+
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'quizz')]
     private Collection $categories;
 
-    #[ORM\OneToMany(mappedBy: 'quizz', targetEntity: Question::class)]
+    #[ORM\OneToMany(mappedBy: 'quizz', targetEntity: Question::class, cascade: ['persist'])]
     private Collection $questions;
 
     public function __construct()
@@ -44,6 +51,24 @@ class Quizz
     {
         $this->name = $name;
 
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param string|null $slug
+     * @return Quizz
+     */
+    public function setSlug(?string $slug): Quizz
+    {
+        $this->slug = $slug;
         return $this;
     }
 

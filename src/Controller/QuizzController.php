@@ -40,7 +40,7 @@ class QuizzController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_quizz_show', methods: ['GET'])]
+    #[Route('/{slug}', name: 'app_quizz_show', methods: ['GET'])]
     public function show(Quizz $quizz): Response
     {
         return $this->render('quizz/show.html.twig', [
@@ -48,7 +48,7 @@ class QuizzController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_quizz_edit', methods: ['GET', 'POST'])]
+    #[Route('/{slug}/edit', name: 'app_quizz_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Quizz $quizz, QuizzRepository $quizzRepository): Response
     {
         $form = $this->createForm(QuizzType::class, $quizz);
@@ -66,7 +66,7 @@ class QuizzController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_quizz_delete', methods: ['POST'])]
+    #[Route('/{slug}', name: 'app_quizz_delete', methods: ['POST'])]
     public function delete(Request $request, Quizz $quizz, QuizzRepository $quizzRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$quizz->getId(), $request->request->get('_token'))) {

@@ -19,8 +19,8 @@
                 <td>{{ quizz.id }}</td>
                 <td>{{ quizz.name }}</td>
                 <td>
-                    <a href="{{ path('app_quizz_show', {'id': quizz.id}) }}">show</a>
-                    <a href="{{ path('app_quizz_edit', {'id': quizz.id}) }}">edit</a>
+                    <a href="{{ path('app_quizz_show', {'slug': quizz.slug}) }}">show</a>
+                    <a href="{{ path('app_quizz_edit', {'slug': quizz.slug}) }}">edit</a>
                 </td>
             </tr>
         {% else %}

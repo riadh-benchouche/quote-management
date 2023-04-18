@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: QuestionRepository::class)]
 class Question
 {
+    use Traits\TimestampableTrait;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
