@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\BlameableTrait;
 use App\Repository\QuizzRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -13,6 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Quizz
 {
     use Traits\TimestampableTrait;
+    use BlameableTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
