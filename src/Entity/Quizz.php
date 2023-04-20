@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: QuizzRepository::class)]
 class Quizz
@@ -19,6 +20,8 @@ class Quizz
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le nom du quizz est obligatoire')]
+    #[Assert\Type(type: 'string', message: 'Le nom du quizz doit être une chaîne de caractères')]
     private ?string $name = null;
 
     #[ORM\Column(length: 255)]
