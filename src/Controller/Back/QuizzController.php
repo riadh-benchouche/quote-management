@@ -6,6 +6,8 @@ use App\Entity\Quizz;
 use App\Form\QuizzType;
 use App\Repository\QuizzRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,6 +52,14 @@ class QuizzController extends AbstractController
     }
 
     #[Route('/{slug}/edit', name: 'app_quizz_edit', methods: ['GET', 'POST'])]
+    /*
+     * Use of the Security Voter (file: src/Security/Voter/QuizzVoter.php)
+     * #[IsGranted('CAN_EDIT', subject: 'quizz')]
+     * */
+    /*
+     * Use of the Security Attributes
+     */
+    #[Security('user === quizz.getCreatedBy() or is_granted("ROLE_SUPER_ADMIN")')]
     public function edit(Request $request, Quizz $quizz, QuizzRepository $quizzRepository): Response
     {
         $form = $this->createForm(QuizzType::class, $quizz);
@@ -81,6 +91,7 @@ class QuizzController extends AbstractController
     }
 
     #[Route('/{slug}', name: 'app_quizz_delete', methods: ['POST'])]
+    #[IsGranted('CAN_DELETE', subject: 'quizz')]
     public function delete(Request $request, Quizz $quizz, QuizzRepository $quizzRepository): Response
     {
         if ($this->isCsrfTokenValid('delete'.$quizz->getId(), $request->request->get('_token'))) {
