@@ -1,9 +1,14 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('quizz') }}
+{% endblock %}
+
 {% block title %}Quizz index{% endblock %}
 
 {% block body %}
-    <h1>Quizz index</h1>
+    <h1 class="text-white">Quizz index</h1>
 
     <table class="table">
         <thead>

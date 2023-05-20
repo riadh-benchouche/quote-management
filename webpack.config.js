@@ -1,4 +1,5 @@
 const Encore = require('@symfony/webpack-encore');
+const WatchExternalFilesPlugin = require('webpack-watch-files-plugin').default;
 
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
@@ -21,6 +22,7 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.js')
+    .addStyleEntry('quizz', './assets/styles/quizz.scss')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
@@ -56,9 +58,15 @@ Encore
         config.corejs = '3.23';
     })
 
-    // enables Sass/SCSS support
-    .enableSassLoader()
+    .addPlugin(new WatchExternalFilesPlugin({
+        files: [
+            '/templates',
+        ],
+        verbose: true
+    }))
 
+    .enableSassLoader()
+    .enablePostCssLoader()
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
 
