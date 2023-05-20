@@ -30,6 +30,7 @@ RUN apk add --no-cache \
 		gettext \
 		git \
         linux-headers \
+        npm \
 	;
 
 RUN set -eux; \
@@ -104,6 +105,13 @@ RUN set -eux; \
     if [ -f composer.json ]; then \
 		composer install --prefer-dist --no-dev --no-autoloader --no-scripts --no-progress; \
 		composer clear-cache; \
+    fi
+
+# run npm install before copying the rest of the application
+COPY package.json ./
+RUN set -eux; \
+    if [ -f package.json ]; then \
+        npm install; \
     fi
 
 # copy sources
