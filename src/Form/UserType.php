@@ -24,7 +24,7 @@ class UserType extends AbstractType
             ->add('email', EmailType::class, [
                 'label' => 'Email',
             ])
-            ->add('password', TextType::class, [
+            ->add('plainPassword', TextType::class, [
                 'label' => 'Mot de passe',
             ])
             ->add('avatarFile', VichImageType::class, [

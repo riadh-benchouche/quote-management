@@ -17,6 +17,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use TimestampableTrait;
 
+    private ?string $plainPassword;
+
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -194,6 +197,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->id = $serialized['id'];
         $this->email = $serialized['email'];
         $this->password = $serialized['password'];
+        return $this;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): self
+    {
+        $this->plainPassword = $plainPassword;
+
         return $this;
     }
 }

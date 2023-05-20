@@ -37,11 +37,9 @@ security:
 
     role_hierarchy:
         ROLE_SUPER_ADMIN: ROLE_ADMIN
-        ROLE_ADMIN:
-            - ROLE_TEACHER
-            - ROLE_STUDENT
-        ROLE_TEACHER: ROLE_USER
-        ROLE_STUDENT: ROLE_USER
+        ROLE_ACCOUNTANT: ROLE_ACCOUNTANT
+        ROLE_EMPLOYEE: ROLE_EMPLOYEE
+        ROLE_USER: ROLE_USER
 
 when@test:
     security:
