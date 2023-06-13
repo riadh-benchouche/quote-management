@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Traits\TimestampableTrait;
 use App\Repository\UserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -13,12 +14,12 @@ use Symfony\Component\HttpFoundation\File\File;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[Vich\Uploadable]
+#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use TimestampableTrait;
 
-    private ?string $plainPassword;
-
+    // private ?string $plainPassword;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -48,6 +49,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(nullable: true)]
     private ?string $avatarName = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $adress = null;
+
+    #[ORM\Column(length: 5, nullable: true)]
+    private ?string $zipcode = null;
+
+    #[ORM\Column(length: 150, nullable: true)]
+    private ?string $city = null;
+
+    #[ORM\Column(type: 'boolean')]
+    private $isVerified = false;
+
 
     public function getId(): ?int
     {
@@ -184,30 +198,80 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function __serialize(): array
+    // public function __serialize(): array
+    // {
+    //     return [
+    //         'id' => $this->id,
+    //         'email' => $this->email,
+    //         'password' => $this->password,
+    //     ];
+    // }
+    // public function __unserialize(array $serialized)
+    // {
+    //     $this->id = $serialized['id'];
+    //     $this->email = $serialized['email'];
+    //     $this->password = $serialized['password'];
+    //     return $this;
+    // }
+
+    // public function setPlainPassword(?string $plainPassword)
+    // {
+    //     $this->plainPassword = $plainPassword;
+    //     // forces the object to look "dirty" to Doctrine. Avoids
+    //     // Doctrine *not* saving this entity, if only plainPassword changes
+    //     $this->password = null;
+    // }
+
+    // public function getPlainPassword(): ?string
+    // {
+    //     return $this->plainPassword;
+    // }
+
+
+    public function getAdress(): ?string
     {
-        return [
-            'id' => $this->id,
-            'email' => $this->email,
-            'password' => $this->password,
-        ];
+        return $this->adress;
     }
-    public function __unserialize(array $serialized)
+
+    public function setAdress(string $adress): self
     {
-        $this->id = $serialized['id'];
-        $this->email = $serialized['email'];
-        $this->password = $serialized['password'];
+        $this->adress = $adress;
+
         return $this;
     }
 
-    public function getPlainPassword(): ?string
+    public function getZipcode(): ?string
     {
-        return $this->plainPassword;
+        return $this->zipcode;
     }
 
-    public function setPlainPassword(?string $plainPassword): self
+    public function setZipcode(string $zipcode): self
     {
-        $this->plainPassword = $plainPassword;
+        $this->zipcode = $zipcode;
+
+        return $this;
+    }
+
+    public function getCity(): ?string
+    {
+        return $this->city;
+    }
+
+    public function setCity(string $city): self
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    public function isVerified(): bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): self
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }

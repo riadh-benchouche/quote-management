@@ -1,0 +1,37 @@
+<nav class="bg-gray-100">
+	<div class="container mx-auto">
+		<div class="flex items-center justify-between py-4">
+			<a class="text-xl font-bold" href="#">Application de gestion de facture</a>
+			<div class="lg:flex lg:items-center">
+				<ul class="navbar-nav">
+					<li>
+						{# <a class="nav-link {{ request.path == path('main') ? 'active' : '' }}" href="{{ path('main') }}">Accueil</a> #}
+						<a href="#">Accueil</a>
+					</li>
+				</ul>
+				<ul class="navbar-nav ml-auto">
+					{% if app.user %}
+						{% if is_granted('ROLE_PRODUCT_ADMIN') %}
+							<li>
+								<a class="nav-link" href="{{ path('admin_index') }}">Administration</a>
+							</li>
+						{% endif %}
+						<li>
+							<a class="nav-link" href="#">Mon compte</a>
+						</li>
+						<li>
+							<a class="nav-link" href="{{ path('app_logout')}}">Me déconnecter</a>
+						</li>
+					{% else %}
+						<li>
+							<a class="nav-link" href="{{ path('app_register')}}">M'inscrire</a>
+						</li>
+						<li>
+							<a class="nav-link" href="{{ path('app_login')}}">Me Connecter</a>
+						</li>
+					{% endif %}
+				</ul>
+			</div>
+		</div>
+	</div>
+</nav>

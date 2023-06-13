@@ -10,7 +10,9 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class EncodePasswordSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private UserPasswordHasherInterface $passwordHasher){}
+    public function __construct(private UserPasswordHasherInterface $passwordHasher)
+    {
+    }
 
     public function getSubscribedEvents(): array
     {
@@ -42,8 +44,8 @@ class EncodePasswordSubscriber implements EventSubscriberInterface
 
     private function updatePassword(User $object): void
     {
-        if ($object->getPlainPassword()) {
-            $object->setPassword($this->passwordHasher->hashPassword($object, $object->getPlainPassword()));
+        if ($object->getPassword()) {
+            $object->setPassword($this->passwordHasher->hashPassword($object, $object->getPassword()));
         }
     }
 }

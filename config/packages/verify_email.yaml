@@ -1,0 +1,3 @@
+symfonycasts_verify_email:
+# This is the length of time a signed URL is valid for in seconds after it has been created.
+    lifetime: 3600

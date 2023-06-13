@@ -23,10 +23,12 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
 
     public function __construct(private UrlGeneratorInterface $urlGenerator)
     {
+        $this->urlGenerator = $urlGenerator;
     }
 
     public function authenticate(Request $request): Passport
     {
+
         $email = $request->request->get('email', '');
 
         $request->getSession()->set(Security::LAST_USERNAME, $email);
@@ -46,7 +48,7 @@ class AppCustomAuthenticator extends AbstractLoginFormAuthenticator
             return new RedirectResponse($targetPath);
         }
 
-        return new RedirectResponse($this->urlGenerator->generate('app_quizz_index'));
+        return new RedirectResponse($this->urlGenerator->generate('default_index'));
     }
 
     protected function getLoginUrl(Request $request): string
