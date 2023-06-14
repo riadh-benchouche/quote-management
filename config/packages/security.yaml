@@ -37,7 +37,7 @@ security:
         - { path: ^/, roles: ROLE_USER }
 
     role_hierarchy:
-        ROLE_SUPER_ADMIN: ROLE_ACCOUNTANT
+        ROLE_ADMIN: ROLE_ACCOUNTANT
         ROLE_ACCOUNTANT: ROLE_EMPLOYEE
         ROLE_EMPLOYEE: ROLE_USER
 
