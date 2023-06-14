@@ -1,4 +1,20 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+{% block javascripts %}
+	<script></script>
+{% endblock %}
+
+<section id="form-devis">
+	{{ form_start(form) }}
+
+	{{ form_row(form.client) }}
+	{{ form_row(form.message) }}
+	{{ form_row(form.date) }}
+	{{ form_row(form.quantity) }}
+	{{ form_row(form.prixHt) }}
+	{{ form_row(form.tva) }}
+	{{ form_row(form.montant) }}
+	{{ form_row(form.produits) }}
+	{{ form_row(form.status) }}
+
+	<button class="btn">{{ button_label|default('Save') }}</button>
+	{{ form_end(form) }}
+</section>

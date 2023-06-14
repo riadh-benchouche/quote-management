@@ -6,22 +6,32 @@ use App\Entity\Devis;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class DevisType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('message')
+            ->add('message', null, [
+                'attr' => ['class' => 'bg-red-600'],
+            ])
             ->add('date')
             ->add('quantity')
             ->add('prixHt')
             ->add('tva')
             ->add('montant')
-            ->add('status')
+            ->add('status', ChoiceType::class, [
+                'choices' => [
+                    'Brouillon' => 'brouillon',
+                    'Facturé' => 'facture',
+                    'Non accepté' => 'nonAccepte',
+                    'Refusé' => 'refuse',
+                ],
+                'data' => 'brouillon', // Valeur initiale du champ
+            ])
             ->add('client')
-            ->add('produits')
-        ;
+            ->add('produits');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
