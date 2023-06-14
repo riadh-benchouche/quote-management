@@ -17,6 +17,6 @@ controllers_back:
     prefix: /admin
     name_prefix: back_
 
-default_index:
+front_default_index:
     path: /
     controller: App\Controller\Front\DefaultController::index
