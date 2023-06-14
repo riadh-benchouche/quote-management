@@ -32,7 +32,7 @@ class RegistrationController extends AbstractController
     {
 
         if ($this->getUser()) {
-            return $this->redirectToRoute('default_index');
+            return $this->redirectToRoute('front_default_index');
         }
 
         $user = new User();
@@ -92,6 +92,6 @@ class RegistrationController extends AbstractController
         // @TODO Change the redirect on success and handle or remove the flash message in your templates
         $this->addFlash('success', 'Your email address has been verified.');
 
-        return $this->redirectToRoute('default_index');
+        return $this->redirectToRoute('front_default_index');
     }
 }
