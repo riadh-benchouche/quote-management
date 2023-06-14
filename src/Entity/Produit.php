@@ -154,4 +154,9 @@ class Produit
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return $this->name; // Remplacez "nom" par le nom de l'attribut que vous souhaitez afficher
+    }
 }
