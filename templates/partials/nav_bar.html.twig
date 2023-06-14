@@ -1,4 +1,4 @@
-<nav class="bg-gray-100">
+<nav class="bg-gray-500">
 	<div class="container mx-auto">
 		<div class="flex items-center justify-between py-4">
 			<a class="text-xl font-bold" href="#">Application de gestion de facture</a>
@@ -11,9 +11,21 @@
 				</ul>
 				<ul class="navbar-nav ml-auto">
 					{% if app.user %}
-						{% if is_granted('ROLE_PRODUCT_ADMIN') %}
+						{% if is_granted('ROLE_ADMIN') %}
 							<li>
-								<a class="nav-link" href="{{ path('admin_index') }}">Administration</a>
+								<a class="nav-link" href="{{ path('back_app_client_index') }}">Clients</a>
+							</li>
+							<li>
+								<a class="nav-link" href="{{ path('back_app_produit_index') }}">Produits</a>
+							</li>
+							<li>
+								<a class="nav-link" href="{{ path('back_app_categorie_index') }}">Catégories</a>
+							</li>
+							<li>
+								<a class="nav-link" href="{{ path('back_app_devis_index') }}">Devis</a>
+							</li>
+							<li>
+								<a class="nav-link" href="{{ path('back_app_facture_index') }}">Facture</a>
 							</li>
 						{% endif %}
 						<li>

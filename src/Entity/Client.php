@@ -211,4 +211,9 @@ class Client
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return $this->company_name; // Remplacez "nom" par le nom de l'attribut que vous souhaitez afficher
+    }
 }

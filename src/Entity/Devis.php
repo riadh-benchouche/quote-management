@@ -34,7 +34,7 @@ class Devis
     #[ORM\Column]
     private ?float $montant = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 50, options: ["default" => "brouillon"])]
     private ?string $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'devis')]
@@ -95,7 +95,7 @@ class Devis
         return $this->prixHt;
     }
 
-    public function setPrixÃHt(float $prixHt): self
+    public function setPrixHt(float $prixHt): self
     {
         $this->prixHt = $prixHt;
 
