@@ -22,8 +22,6 @@
 {% if app.request.attributes.get('_route') not in ['login', 'register'] %}
     {% block layout %}{% endblock %}
 {% endif %}
-{% if app.request.attributes.get('_route') in ['login', 'register'] %}
-    {% block body %}{% endblock %}
-{% endif %}
+{% block body %}{% endblock %}
 </body>
 </html>

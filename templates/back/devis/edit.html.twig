@@ -1,9 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'partials/layout.html.twig' %}
 
 {% block title %}Edit Devis
 {% endblock %}
 
-{% block body %}
+{% block main %}
 	<h1>Edit Devis</h1>
 
 	{{ include('back/devis/_form.html.twig', {'button_label': 'Update'}) }}
