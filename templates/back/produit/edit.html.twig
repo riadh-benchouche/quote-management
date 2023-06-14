@@ -1,9 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'partials/layout.html.twig' %}
 
 {% block title %}Edit Produit
 {% endblock %}
 
-{% block body %}
+{% block main %}
 	<h1>Edit Produit</h1>
 
 	{{ include('back/produit/_form.html.twig', {'button_label': 'Update'}) }}
