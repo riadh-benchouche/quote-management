@@ -16,7 +16,7 @@ class ClientController extends AbstractController
     #[Route('/', name: 'app_client_index', methods: ['GET'])]
     public function index(ClientRepository $clientRepository): Response
     {
-        return $this->render('client/index.html.twig', [
+        return $this->render('back/client/index.html.twig', [
             'clients' => $clientRepository->findAll(),
         ]);
     }
@@ -31,10 +31,10 @@ class ClientController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $clientRepository->save($client, true);
 
-            return $this->redirectToRoute('app_client_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('back_app_client_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('client/new.html.twig', [
+        return $this->renderForm('back/client/new.html.twig', [
             'client' => $client,
             'form' => $form,
         ]);
@@ -43,7 +43,7 @@ class ClientController extends AbstractController
     #[Route('/{id}', name: 'app_client_show', methods: ['GET'])]
     public function show(Client $client): Response
     {
-        return $this->render('client/show.html.twig', [
+        return $this->render('back/client/show.html.twig', [
             'client' => $client,
         ]);
     }
@@ -57,10 +57,10 @@ class ClientController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $clientRepository->save($client, true);
 
-            return $this->redirectToRoute('app_client_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('back_app_client_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('client/edit.html.twig', [
+        return $this->renderForm('back/client/edit.html.twig', [
             'client' => $client,
             'form' => $form,
         ]);
@@ -73,6 +73,6 @@ class ClientController extends AbstractController
             $clientRepository->remove($client, true);
         }
 
-        return $this->redirectToRoute('app_client_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('back_app_client_index', [], Response::HTTP_SEE_OTHER);
     }
 }
