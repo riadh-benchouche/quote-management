@@ -23,8 +23,8 @@ class DevisType extends AbstractType
                 'choices' => [
                     'Brouillon' => 'brouillon',
                     'Facturé' => 'facture',
+                    'Accepté' => 'accepte',
                     'Non accepté' => 'nonAccepte',
-                    'Refusé' => 'refuse',
                 ],
                 'data' => 'brouillon', // Valeur initiale du champ
             ])
