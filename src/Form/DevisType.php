@@ -13,9 +13,7 @@ class DevisType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('message', null, [
-                'attr' => ['class' => 'bg-red-600'],
-            ])
+            ->add('message')
             ->add('date')
             ->add('quantity')
             ->add('prixHt')
