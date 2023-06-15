@@ -12,7 +12,7 @@ class UserFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
-        $pwd = '123456';
+        $pwd = '$2y$13$g1t7mqeSK4qw4O05wxTxo.sr8wL5WqafX3/AuDB.CVow8SsqbDGrW';
 
         $object = (new User())
             ->setEmail('user@user.fr')
