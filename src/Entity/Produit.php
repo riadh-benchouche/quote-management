@@ -27,20 +27,8 @@ class Produit
     #[ORM\Column]
     private ?float $montant = null;
 
-    #[ORM\ManyToMany(targetEntity: Devis::class, inversedBy: 'produits')]
-    private Collection $devis;
-
-    #[ORM\ManyToMany(targetEntity: Facture::class, inversedBy: 'produits')]
-    private Collection $factures;
-
     #[ORM\ManyToOne(inversedBy: 'produits')]
     private ?Categorie $categorie = null;
-
-    public function __construct()
-    {
-        $this->devis = new ArrayCollection();
-        $this->factures = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -91,54 +79,6 @@ class Produit
     public function setMontant(float $montant): self
     {
         $this->montant = $montant;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Devis>
-     */
-    public function getDevis(): Collection
-    {
-        return $this->devis;
-    }
-
-    public function addDevi(Devis $devi): self
-    {
-        if (!$this->devis->contains($devi)) {
-            $this->devis->add($devi);
-        }
-
-        return $this;
-    }
-
-    public function removeDevi(Devis $devi): self
-    {
-        $this->devis->removeElement($devi);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, Facture>
-     */
-    public function getFactures(): Collection
-    {
-        return $this->factures;
-    }
-
-    public function addFacture(Facture $facture): self
-    {
-        if (!$this->factures->contains($facture)) {
-            $this->factures->add($facture);
-        }
-
-        return $this;
-    }
-
-    public function removeFacture(Facture $facture): self
-    {
-        $this->factures->removeElement($facture);
 
         return $this;
     }

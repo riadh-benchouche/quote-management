@@ -22,20 +22,11 @@ class Facture
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
-    #[ORM\Column]
-    private ?int $quantity = null;
-
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $echeance = null;
 
     #[ORM\Column(length: 50)]
     private ?string $status = null;
-
-    #[ORM\Column]
-    private ?float $prixHt = null;
-
-    #[ORM\Column]
-    private ?float $tva = null;
 
     #[ORM\Column]
     private ?float $montant = null;
@@ -44,14 +35,8 @@ class Facture
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $client = null;
 
-    #[ORM\ManyToMany(targetEntity: Produit::class, mappedBy: 'factures')]
-    private Collection $produits;
-
-    public function __construct()
-    {
-        $this->produits = new ArrayCollection();
-    }
-
+    #[ORM\ManyToOne(inversedBy: 'factures')]
+    private ?Devis $devis = null;
     public function getId(): ?int
     {
         return $this->id;
@@ -117,30 +102,6 @@ class Facture
         return $this;
     }
 
-    public function getPrixHt(): ?float
-    {
-        return $this->prixHt;
-    }
-
-    public function setPrixHt(float $prixHt): self
-    {
-        $this->prixHt = $prixHt;
-
-        return $this;
-    }
-
-    public function getTva(): ?float
-    {
-        return $this->tva;
-    }
-
-    public function setTva(float $tva): self
-    {
-        $this->tva = $tva;
-
-        return $this;
-    }
-
     public function getMontant(): ?float
     {
         return $this->montant;
@@ -165,29 +126,14 @@ class Facture
         return $this;
     }
 
-    /**
-     * @return Collection<int, Produit>
-     */
-    public function getProduits(): Collection
+    public function getDevis(): ?Devis
     {
-        return $this->produits;
+        return $this->devis;
     }
 
-    public function addProduit(Produit $produit): self
+    public function setDevis(?Devis $devis): self
     {
-        if (!$this->produits->contains($produit)) {
-            $this->produits->add($produit);
-            $produit->addFacture($this);
-        }
-
-        return $this;
-    }
-
-    public function removeProduit(Produit $produit): self
-    {
-        if ($this->produits->removeElement($produit)) {
-            $produit->removeFacture($this);
-        }
+        $this->devis = $devis;
 
         return $this;
     }
