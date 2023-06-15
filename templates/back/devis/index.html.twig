@@ -4,8 +4,6 @@
 {% endblock %}
 
 {% block main %}
-
-    <div class="px-4 sm:px-6 lg:px-8">
         <div class="sm:flex sm:items-center">
             <div class="sm:flex-auto">
                 <h1 class="text-base font-semibold leading-6 text-gray-900">Devis </h1>
@@ -22,24 +20,24 @@
                 <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
                     <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
                         <table class="min-w-full divide-y divide-gray-300 px-3">
-                            <thead>
+                            <thead class="bg-primary">
                             <tr>
                                 <th scope="col"
-                                    class="py-3.5 px-3 text-left text-sm font-semibold text-gray-900">
+                                    class="py-3.5 px-4 text-left text-sm font-semibold text-white">
                                     Numéro
                                 </th>
-                                <th scope="col" class="px-4 py-3.5 text-left text-sm font-semibold text-gray-900">Client
+                                <th scope="col" class="px-4 py-3.5 text-left text-sm font-semibold text-white">Client
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Date
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Date
                                     de
                                     création
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Total
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Total
                                     TTC
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Statut
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">Statut
                                 </th>
-                                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0">
+                                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-0  text-white">
                                    Actions
                                 </th>
                             </tr>
@@ -63,7 +61,7 @@
                                 </tr>
                             {% else %}
                                 <tr>
-                                    <td colspan="9">Aucun devis trouvé</td>
+                                    <td colspan="6" class="flex flex-1 justify-center items-center py-8">Aucun devis trouvé</td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -72,5 +70,4 @@
                 </div>
             </div>
         </div>
-    </div>
 {% endblock %}

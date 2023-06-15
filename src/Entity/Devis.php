@@ -23,15 +23,6 @@ class Devis
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column]
-    private ?int $quantity = null;
-
-    #[ORM\Column]
-    private ?float $prixHt = null;
-
-    #[ORM\Column]
-    private ?float $tva = null;
-
-    #[ORM\Column]
     private ?float $montant = null;
 
     #[ORM\Column(length: 50, options: ["default" => "brouillon"])]
@@ -41,12 +32,12 @@ class Devis
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $client = null;
 
-    #[ORM\ManyToMany(targetEntity: Produit::class, mappedBy: 'devis')]
-    private Collection $produits;
+    #[ORM\OneToMany(mappedBy: 'devis', targetEntity: Facture::class)]
+    private Collection $factures;
 
     public function __construct()
     {
-        $this->produits = new ArrayCollection();
+        $this->factures = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -78,41 +69,6 @@ class Devis
         return $this;
     }
 
-    public function getQuantity(): ?int
-    {
-        return $this->quantity;
-    }
-
-    public function setQuantity(int $quantity): self
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
-
-    public function getPrixHt(): ?float
-    {
-        return $this->prixHt;
-    }
-
-    public function setPrixHt(float $prixHt): self
-    {
-        $this->prixHt = $prixHt;
-
-        return $this;
-    }
-
-    public function getTva(): ?float
-    {
-        return $this->tva;
-    }
-
-    public function setTva(float $tva): self
-    {
-        $this->tva = $tva;
-
-        return $this;
-    }
 
     public function getMontant(): ?float
     {
@@ -151,27 +107,30 @@ class Devis
     }
 
     /**
-     * @return Collection<int, Produit>
+     * @return Collection<int, Facture>
      */
-    public function getProduits(): Collection
+    public function getFactures(): Collection
     {
-        return $this->produits;
+        return $this->factures;
     }
 
-    public function addProduit(Produit $produit): self
+    public function addFacture(Facture $facture): self
     {
-        if (!$this->produits->contains($produit)) {
-            $this->produits->add($produit);
-            $produit->addDevi($this);
+        if (!$this->factures->contains($facture)) {
+            $this->factures->add($facture);
+            $facture->setDevis($this);
         }
 
         return $this;
     }
 
-    public function removeProduit(Produit $produit): self
+    public function removeFacture(Facture $facture): self
     {
-        if ($this->produits->removeElement($produit)) {
-            $produit->removeDevi($this);
+        if ($this->factures->removeElement($facture)) {
+            // set the owning side to null (unless already changed)
+            if ($facture->getDevis() === $this) {
+                $facture->setDevis(null);
+            }
         }
 
         return $this;
