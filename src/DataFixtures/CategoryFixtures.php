@@ -2,7 +2,7 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Category;
+use App\Entity\Categorie;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -14,8 +14,8 @@ class CategoryFixtures extends Fixture
         $faker = Factory::create('fr_FR');
 
         for ($i = 0; $i < 50; $i++) {
-            $object = (new Category())
-                ->setName($faker->colorName)
+            $object = (new Categorie())
+                ->setNom($faker->colorName)
             ;
             $manager->persist($object);
         }
