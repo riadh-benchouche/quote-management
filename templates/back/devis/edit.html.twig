@@ -4,11 +4,11 @@
 {% endblock %}
 
 {% block main %}
-	<h1>Edit Devis</h1>
+	<h1>Editer le Devis</h1>
 
 	{{ include('back/devis/_form.html.twig', {'button_label': 'Update'}) }}
 
-	<a href="{{ path('back_app_devis_index') }}">back to list</a>
+	<a href="{{ path('back_app_devis_index') }}">Voir tous les devis</a>
 
 	{{ include('back/devis/_delete_form.html.twig') }}
 {% endblock %}
