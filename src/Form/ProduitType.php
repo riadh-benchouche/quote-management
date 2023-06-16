@@ -16,10 +16,7 @@ class ProduitType extends AbstractType
             ->add('prixHt')
             ->add('tva')
             ->add('montant')
-            ->add('devis')
-            ->add('factures')
-            ->add('categorie')
-        ;
+            ->add('categorie');
     }
 
     public function configureOptions(OptionsResolver $resolver): void

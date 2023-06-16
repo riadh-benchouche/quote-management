@@ -3,7 +3,9 @@
 namespace App\Controller\Back;
 
 use App\Entity\Devis;
+use App\Entity\ProduitDevis;
 use App\Form\DevisType;
+use App\Form\ProduitDevisType;
 use App\Repository\DevisRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +28,7 @@ class DevisController extends AbstractController
     {
         $devi = new Devis();
         $form = $this->createForm(DevisType::class, $devi);
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
