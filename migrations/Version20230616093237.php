@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20230615100146 extends AbstractMigration
+final class Version20230616093237 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -33,8 +33,9 @@ final class Version20230615100146 extends AbstractMigration
         $this->addSql('CREATE TABLE client (id INT NOT NULL, company_name VARCHAR(100) NOT NULL, email VARCHAR(100) DEFAULT NULL, lastname VARCHAR(100) DEFAULT NULL, firstname VARCHAR(100) DEFAULT NULL, address VARCHAR(255) DEFAULT NULL, zipcode VARCHAR(5) DEFAULT NULL, city VARCHAR(100) DEFAULT NULL, phone VARCHAR(20) DEFAULT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE devis (id INT NOT NULL, client_id INT NOT NULL, message TEXT DEFAULT NULL, date DATE NOT NULL, montant DOUBLE PRECISION NOT NULL, status VARCHAR(50) DEFAULT \'brouillon\' NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_8B27C52B19EB6921 ON devis (client_id)');
-        $this->addSql('CREATE TABLE facture (id INT NOT NULL, client_id INT NOT NULL, message TEXT DEFAULT NULL, date DATE NOT NULL, echeance DATE NOT NULL, status VARCHAR(50) NOT NULL, montant DOUBLE PRECISION NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE TABLE facture (id INT NOT NULL, client_id INT NOT NULL, devis_id INT DEFAULT NULL, message TEXT DEFAULT NULL, date DATE NOT NULL, echeance DATE NOT NULL, status VARCHAR(50) NOT NULL, montant DOUBLE PRECISION NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_FE86641019EB6921 ON facture (client_id)');
+        $this->addSql('CREATE INDEX IDX_FE86641041DEFADA ON facture (devis_id)');
         $this->addSql('CREATE TABLE paiement (id INT NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE TABLE produit (id INT NOT NULL, categorie_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, prix_ht DOUBLE PRECISION NOT NULL, tva DOUBLE PRECISION NOT NULL, montant DOUBLE PRECISION NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX IDX_29A5EC27BCF5E72D ON produit (categorie_id)');
@@ -60,6 +61,7 @@ final class Version20230615100146 extends AbstractMigration
         $this->addSql('CREATE TRIGGER notify_trigger AFTER INSERT OR UPDATE ON messenger_messages FOR EACH ROW EXECUTE PROCEDURE notify_messenger_messages();');
         $this->addSql('ALTER TABLE devis ADD CONSTRAINT FK_8B27C52B19EB6921 FOREIGN KEY (client_id) REFERENCES client (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE facture ADD CONSTRAINT FK_FE86641019EB6921 FOREIGN KEY (client_id) REFERENCES client (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
+        $this->addSql('ALTER TABLE facture ADD CONSTRAINT FK_FE86641041DEFADA FOREIGN KEY (devis_id) REFERENCES devis (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE produit ADD CONSTRAINT FK_29A5EC27BCF5E72D FOREIGN KEY (categorie_id) REFERENCES categorie (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE produit_devis ADD CONSTRAINT FK_BBBBA2BFF347EFB FOREIGN KEY (produit_id) REFERENCES produit (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
         $this->addSql('ALTER TABLE produit_devis ADD CONSTRAINT FK_BBBBA2BF41DEFADA FOREIGN KEY (devis_id) REFERENCES devis (id) NOT DEFERRABLE INITIALLY IMMEDIATE');
@@ -82,6 +84,7 @@ final class Version20230615100146 extends AbstractMigration
         $this->addSql('DROP SEQUENCE "user_id_seq" CASCADE');
         $this->addSql('ALTER TABLE devis DROP CONSTRAINT FK_8B27C52B19EB6921');
         $this->addSql('ALTER TABLE facture DROP CONSTRAINT FK_FE86641019EB6921');
+        $this->addSql('ALTER TABLE facture DROP CONSTRAINT FK_FE86641041DEFADA');
         $this->addSql('ALTER TABLE produit DROP CONSTRAINT FK_29A5EC27BCF5E72D');
         $this->addSql('ALTER TABLE produit_devis DROP CONSTRAINT FK_BBBBA2BFF347EFB');
         $this->addSql('ALTER TABLE produit_devis DROP CONSTRAINT FK_BBBBA2BF41DEFADA');

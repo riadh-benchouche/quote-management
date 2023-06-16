@@ -17,10 +17,6 @@ class ProduitDevis
     #[ORM\JoinColumn(nullable: false)]
     private ?Produit $produit = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Devis $devis = null;
-
     #[ORM\Column]
     private ?int $quantity = null;
 
@@ -29,6 +25,10 @@ class ProduitDevis
 
     #[ORM\Column]
     private ?float $price = null;
+
+    #[ORM\ManyToOne(inversedBy: 'produitDevis')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Devis $devis = null;
 
     public function getId(): ?int
     {
@@ -43,18 +43,6 @@ class ProduitDevis
     public function setProduit(?Produit $produit): self
     {
         $this->produit = $produit;
-
-        return $this;
-    }
-
-    public function getDevis(): ?Devis
-    {
-        return $this->devis;
-    }
-
-    public function setDevis(?Devis $devis): self
-    {
-        $this->devis = $devis;
 
         return $this;
     }
@@ -91,6 +79,18 @@ class ProduitDevis
     public function setPrice(float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getDevis(): ?Devis
+    {
+        return $this->devis;
+    }
+
+    public function setDevis(?Devis $devis): self
+    {
+        $this->devis = $devis;
 
         return $this;
     }

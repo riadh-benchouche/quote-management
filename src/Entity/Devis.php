@@ -35,9 +35,13 @@ class Devis
     #[ORM\OneToMany(mappedBy: 'devis', targetEntity: Facture::class)]
     private Collection $factures;
 
+    #[ORM\OneToMany(mappedBy: 'devis', targetEntity: ProduitDevis::class, orphanRemoval: true)]
+    private Collection $produitDevis;
+
     public function __construct()
     {
         $this->factures = new ArrayCollection();
+        $this->produitDevis = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -130,6 +134,36 @@ class Devis
             // set the owning side to null (unless already changed)
             if ($facture->getDevis() === $this) {
                 $facture->setDevis(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProduitDevis>
+     */
+    public function getProduitDevis(): Collection
+    {
+        return $this->produitDevis;
+    }
+
+    public function addProduitDevi(ProduitDevis $produitDevi): self
+    {
+        if (!$this->produitDevis->contains($produitDevi)) {
+            $this->produitDevis->add($produitDevi);
+            $produitDevi->setDevisId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduitDevi(ProduitDevis $produitDevi): self
+    {
+        if ($this->produitDevis->removeElement($produitDevi)) {
+            // set the owning side to null (unless already changed)
+            if ($produitDevi->getDevisId() === $this) {
+                $produitDevi->setDevisId(null);
             }
         }
 

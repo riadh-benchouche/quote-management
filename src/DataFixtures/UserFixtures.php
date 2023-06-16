@@ -12,7 +12,7 @@ class UserFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
-        $pwd = 'test';
+        $pwd = '$2y$13$g1t7mqeSK4qw4O05wxTxo.sr8wL5WqafX3/AuDB.CVow8SsqbDGrW';
 
         $object = (new User())
             ->setEmail('user@user.fr')
@@ -20,7 +20,7 @@ class UserFixtures extends Fixture
             ->setFirstname($faker->firstName)
             ->setRoles([])
             ->setPassword($pwd)
-        ;
+            ->setIsVerified(true);
         $manager->persist($object);
 
         $object = (new User())
@@ -29,9 +29,26 @@ class UserFixtures extends Fixture
             ->setFirstname($faker->firstName)
             ->setRoles(['ROLE_ADMIN'])
             ->setPassword($pwd)
-        ;
+            ->setIsVerified(true);
         $manager->persist($object);
 
+        $object = (new User())
+            ->setEmail('comptable@user.fr')
+            ->setLastname($faker->lastName)
+            ->setFirstname($faker->firstName)
+            ->setRoles(['ROLE_ACCOUNTANT'])
+            ->setPassword($pwd)
+            ->setIsVerified(true);
+        $manager->persist($object);
+
+        $object = (new User())
+            ->setEmail('salarie@user.fr')
+            ->setLastname($faker->lastName)
+            ->setFirstname($faker->firstName)
+            ->setRoles(['ROLE_EMPLOYEE'])
+            ->setPassword($pwd)
+            ->setIsVerified(true);
+        $manager->persist($object);
 
         $manager->flush();
     }

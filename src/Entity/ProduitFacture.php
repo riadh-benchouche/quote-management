@@ -13,7 +13,7 @@ class ProduitFacture
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'produitFacture')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Facture $facture = null;
 
@@ -33,18 +33,6 @@ class ProduitFacture
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getFacture(): ?Facture
-    {
-        return $this->facture;
-    }
-
-    public function setFacture(?Facture $facture): self
-    {
-        $this->facture = $facture;
-
-        return $this;
     }
 
     public function getProduit(): ?Produit
@@ -91,6 +79,18 @@ class ProduitFacture
     public function setPrice(float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getFacture(): ?Facture
+    {
+        return $this->facture;
+    }
+
+    public function setFacture(?Facture $facture): self
+    {
+        $this->facture = $facture;
 
         return $this;
     }
