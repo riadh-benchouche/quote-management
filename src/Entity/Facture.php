@@ -37,6 +37,15 @@ class Facture
 
     #[ORM\ManyToOne(inversedBy: 'factures')]
     private ?Devis $devis = null;
+
+    #[ORM\OneToMany(mappedBy: 'facture', targetEntity: ProduitFacture::class, orphanRemoval: true)]
+    private Collection $produitFacture;
+
+    public function __construct()
+    {
+        $this->produitFacture = new ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -134,6 +143,36 @@ class Facture
     public function setDevis(?Devis $devis): self
     {
         $this->devis = $devis;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProduitFacture>
+     */
+    public function getProduitFacture(): Collection
+    {
+        return $this->produitFacture;
+    }
+
+    public function addProduitFacture(ProduitFacture $produitFacture): self
+    {
+        if (!$this->produitFacture->contains($produitFacture)) {
+            $this->produitFacture->add($produitFacture);
+            $produitFacture->setFacture($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduitFacture(ProduitFacture $produitFacture): self
+    {
+        if ($this->produitFacture->removeElement($produitFacture)) {
+            // set the owning side to null (unless already changed)
+            if ($produitFacture->getFacture() === $this) {
+                $produitFacture->setFacture(null);
+            }
+        }
 
         return $this;
     }
