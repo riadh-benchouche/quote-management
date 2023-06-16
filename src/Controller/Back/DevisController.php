@@ -5,6 +5,7 @@ namespace App\Controller\Back;
 use App\Entity\Devis;
 use App\Form\DevisType;
 use App\Repository\DevisRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,10 +15,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class DevisController extends AbstractController
 {
     #[Route('/', name: 'app_devis_index', methods: ['GET'])]
-    public function index(DevisRepository $devisRepository): Response
+    public function index(Request $request, DevisRepository $devisRepository,  PaginatorInterface $paginator): Response
     {
+        $devis = $paginator->paginate(
+            $devisRepository->findAll(),
+            $request->query->getInt('page', 1),
+            10
+        );
         return $this->render('back/devis/index.html.twig', [
-            'devis' => $devisRepository->findAll(),
+            'devis' => $devis,
         ]);
     }
 
