@@ -12,7 +12,8 @@
         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
             <a href="{{ path('back_app_categorie_new') }}"
                class="block rounded-md bg-secondary px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-secondary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Ajouter
-                Categorie</a>
+                Categorie
+            </a>
         </div>
     </div>
     <div class="mt-8 flow-root">
@@ -72,6 +73,9 @@
                         {% endfor %}
                         </tbody>
                     </table>
+                </div>
+                <div id="paginator">
+                    {{ knp_pagination_render(categories) }}
                 </div>
             </div>
         </div>
