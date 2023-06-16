@@ -8,6 +8,10 @@
             @apply
             flex flex-1 space-x-2
         }
+        #devis-produits div input {
+            @apply
+            block w-20
+        }
         background-color: rgb(213, 208, 208);
         @apply
         px-8 py-10

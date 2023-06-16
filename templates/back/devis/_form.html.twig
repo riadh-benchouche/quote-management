@@ -1,52 +1,17 @@
 <section id="form-devis">
 	{{ form_start(form) }}
 
-	{{ form_row(form.client) }}
-	{{ form_row(form.message) }}
+	{{ form_row(form.client, {'empty_data': null, 'placeholder': 'Sélectionner un client'}) }}
+	<hr>
 	{{ form_row(form.date) }}
-	{{ form_row(form.quantity) }}
-	{{ form_row(form.prixHt) }}
-	{{ form_row(form.tva) }}
-	{{ form_row(form.montant) }}
-	{{ form_row(form.produits) }}
-	{{ form_row(form.status) }}
+	{{ form_row(form.message) }}
+	<hr>
 
+	<h3>Produits</h3>
+
+	{# Bouton pour ajouter une nouvelle ligne #}
 	<button class="btn">{{ button_label|default('Save') }}</button>
 	{{ form_end(form) }}
 </section>
 
-{% block javascripts %}
-	<script>
-		// Récupérer les références des champs
-const quantiteInput = document.getElementById('devis_quantity');
-const prixHtInput = document.getElementById('devis_prixHt');
-const tvaInput = document.getElementById('devis_tva');
-const montantInput = document.getElementById('devis_montant');
-
-// Fonction de mise à jour du montant
-function updateMontant() {
-const quantite = parseFloat(quantiteInput.value);
-const prixHt = parseFloat(prixHtInput.value);
-const tva = parseFloat(tvaInput.value);
-
-// Calculer le montant en multipliant la quantité par le prix HT
-let montant = quantite * prixHt;
-
-// Ajouter la TVA si elle est spécifiée
-if (!isNaN(tva)) {
-montant += montant * (tva / 100);
-}
-
-// Afficher le montant avec 2 décimales
-montantInput.value = montant.toFixed(2);
-}
-
-// Écouter les événements de modification des champs
-quantiteInput.addEventListener('input', updateMontant);
-prixHtInput.addEventListener('input', updateMontant);
-tvaInput.addEventListener('input', updateMontant);
-
-// Appeler la fonction de mise à jour initiale
-updateMontant();
-	</script>
-{% endblock %}
+<script></script>

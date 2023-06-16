@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 class DevisType extends AbstractType
 {
@@ -14,10 +15,9 @@ class DevisType extends AbstractType
     {
         $builder
             ->add('message')
-            ->add('date')
-            ->add('quantity')
-            ->add('prixHt')
-            ->add('tva')
+            ->add('date', DateType::class, [
+                'widget' => 'single_text',
+            ])
             ->add('montant')
             ->add('status', ChoiceType::class, [
                 'choices' => [
@@ -26,10 +26,9 @@ class DevisType extends AbstractType
                     'Accepted' => 'accepted',
                     'Rejected' => 'rejected',
                 ],
-                'data' => 'draft', // Valeur initiale du champ
+                'data' => 'draft',
             ])
-            ->add('client')
-            ->add('produits');
+            ->add('client');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
