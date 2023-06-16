@@ -18,7 +18,7 @@ class DevisController extends AbstractController
     public function index(Request $request, DevisRepository $devisRepository,  PaginatorInterface $paginator): Response
     {
         $devis = $paginator->paginate(
-            $devisRepository->findAll(),
+            $devisRepository->findBy([], ['date' => 'ASC']),
             $request->query->getInt('page', 1),
             10
         );

@@ -21,12 +21,12 @@ class DevisType extends AbstractType
             ->add('montant')
             ->add('status', ChoiceType::class, [
                 'choices' => [
-                    'Brouillon' => 'brouillon',
-                    'Facturé' => 'facture',
-                    'Accepté' => 'accepte',
-                    'Non accepté' => 'nonAccepte',
+                    'Draft' => 'draft',
+                    'Invoiced' => 'invoiced',
+                    'Accepted' => 'accepted',
+                    'Rejected' => 'rejected',
                 ],
-                'data' => 'brouillon', // Valeur initiale du champ
+                'data' => 'draft', // Valeur initiale du champ
             ])
             ->add('client')
             ->add('produits');
