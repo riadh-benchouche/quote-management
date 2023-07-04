@@ -8,10 +8,8 @@ use App\Entity\ProduitDevis;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 
 class DevisType extends AbstractType
@@ -26,12 +24,12 @@ class DevisType extends AbstractType
             ->add('montant')
             ->add('status', ChoiceType::class, [
                 'choices' => [
-                    'Brouillon' => 'draft',
-                    'Facturé' => 'invoiced',
-                    'Accepté' => 'accepted',
-                    'Non accepté' => 'rejected',
+                    'Draft' => 'draft',
+                    'Invoiced' => 'invoiced',
+                    'Accepted' => 'accepted',
+                    'Rejected' => 'rejected',
                 ],
-                'data' => 'brouillon',
+                'data' => 'draft',
             ])
             ->add('client')
             ->add('produitDevis', CollectionType::class, [
