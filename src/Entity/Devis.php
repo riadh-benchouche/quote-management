@@ -152,7 +152,7 @@ class Devis
     {
         if (!$this->produitDevis->contains($produitDevi)) {
             $this->produitDevis->add($produitDevi);
-            $produitDevi->setDevisId($this);
+            $produitDevi->setDevis($this);
         }
 
         return $this;
@@ -162,8 +162,8 @@ class Devis
     {
         if ($this->produitDevis->removeElement($produitDevi)) {
             // set the owning side to null (unless already changed)
-            if ($produitDevi->getDevisId() === $this) {
-                $produitDevi->setDevisId(null);
+            if ($produitDevi->getDevis() === $this) {
+                $produitDevi->setDevis(null);
             }
         }
 

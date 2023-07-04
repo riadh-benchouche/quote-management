@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Devis;
 use App\Entity\Produit;
+use App\Entity\ProduitDevis;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -12,7 +13,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class DevisType extends AbstractType
 {
@@ -33,7 +33,12 @@ class DevisType extends AbstractType
                 ],
                 'data' => 'brouillon',
             ])
-            ->add('client');
+            ->add('client')
+            ->add('produitDevis', CollectionType::class, [
+                'entry_type' => ProduitDevisType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

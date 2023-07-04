@@ -9,9 +9,89 @@
 
 	<h3>Produits</h3>
 
+	<div class="flex flex-col">
+		{% for produitDevis in form.produitDevis %}
+			<ul id="devis-produits" class="produitDevis flex flex-1 flex-row" data-index="{{ form.produitDevis|length > 0 ? form.produitDevis|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.produitDevis.vars.prototype)|e('html_attr') }}">
+				<li>{{ form_row(produitDevis['devis']) }}</li>
+				<li>{{ form_row(produitDevis['produit']) }}</li>
+				<li>{{ form_row(produitDevis['quantity']) }}</li>
+				<li>{{ form_row(produitDevis['price']) }}</li>
+				<li>{{ form_row(produitDevis['tva']) }}</li>
+				<li id="devis_montant"></li>
+			</ul>
+		{% endfor %}
+	</div>
+	<button type="button" class="add_item_link" data-collection-holder-class="produitDevis">Ajouter un produit</button>
+
+	<hr>
+
+	{{ form_row(form.montant) }}
+	{{ form_row(form.status) }}
+
+	<hr>
+
 	{# Bouton pour ajouter une nouvelle ligne #}
 	<button class="btn">{{ button_label|default('Save') }}</button>
 	{{ form_end(form) }}
+
 </section>
 
-<script></script>
+{% block javascripts %}
+	<script>
+
+		const addFormToCollection = (e) => {
+const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+
+const ul = document.createElement('ul');
+ul.classList.add('flex', 'flex-1', 'flex-row');
+
+const item = document.createElement('li');
+item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.dataset.index);
+
+ul.appendChild(item);
+collectionHolder.appendChild(ul);
+
+collectionHolder.dataset.index ++;
+};
+
+
+// Add product dynamically
+document.querySelectorAll('.add_item_link').forEach(btn => {
+btn.addEventListener("click", addFormToCollection)
+});
+
+// Récupérer les références des champs
+const quantiteInput = document.getElementById('devis_produitDevis_0_quantity');
+const prixHtInput = document.getElementById('devis_produitDevis_0_price');
+const tvaInput = document.getElementById('devis_produitDevis_0_tva');
+const montantInput = document.getElementById('devis_montant');
+
+// Fonction de mise à jour du montant
+function updateMontant() {
+const quantite = parseFloat(quantiteInput.value);
+const prixHt = parseFloat(prixHtInput.value);
+const tva = parseFloat(tvaInput.value);
+
+// Calculer le montant en multipliant la quantité par le prix HT
+let montant = quantite * prixHt;
+
+// Ajouter la TVA si elle est spécifiée
+if (!isNaN(tva)) {
+montant += montant * (tva / 100);
+}
+
+// Afficher le montant avec 2 décimales
+if (!isNaN(montant)) {
+montantInput.textContent = montant.toFixed(2);
+}
+}
+
+// Écouter les événements de modification des champs
+quantiteInput.addEventListener('input', updateMontant);
+prixHtInput.addEventListener('input', updateMontant);
+tvaInput.addEventListener('input', updateMontant);
+
+// Appeler la fonction de mise à jour initiale
+updateMontant();
+	</script>
+{% endblock %}

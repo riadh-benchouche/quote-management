@@ -33,6 +33,13 @@ class DevisController extends AbstractController
     public function new(Request $request, DevisRepository $devisRepository): Response
     {
         $devi = new Devis();
+
+        // dummy code - add some example tags to the task
+        // (otherwise, the template will render an empty list of tags)
+        $produitDevis1 = new ProduitDevis();
+        $devi->getProduitDevis()->add($produitDevis1);
+        // end dummy code
+
         $form = $this->createForm(DevisType::class, $devi);
 
         $form->handleRequest($request);

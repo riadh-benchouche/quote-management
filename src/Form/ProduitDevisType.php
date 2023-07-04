@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\ProduitDevis;
+use App\Entity\Devis;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,7 +25,10 @@ class ProduitDevisType extends AbstractType
                 'class' => Produit::class,
                 'choice_label' => 'name',
             ])
-            ->add('devis');
+            ->add('devis', EntityType::class, [
+                'class' => Devis::class,
+                'choice_label' => 'id',
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
