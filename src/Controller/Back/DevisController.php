@@ -42,17 +42,14 @@ class DevisController extends AbstractController
     {
         $devi = new Devis();
 
-        // dummy code - add some example tags to the task
-        // (otherwise, the template will render an empty list of tags)
-        $produitDevis1 = new ProduitDevis();
-        $devi->getProduitDevis()->add($produitDevis1);
-        // end dummy code
-
         $form = $this->createForm(DevisType::class, $devi);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($devi->getProduitDevis() as $produitDevis) {
+                $produitDevis->setDevis($devi);
+            }
             $devisRepository->save($devi, true);
 
             return $this->redirectToRoute('back_app_devis_index', [], Response::HTTP_SEE_OTHER);
