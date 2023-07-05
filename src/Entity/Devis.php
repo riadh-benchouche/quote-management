@@ -39,7 +39,7 @@ class Devis
     #[ORM\OneToMany(mappedBy: 'devis', targetEntity: Facture::class)]
     private Collection $factures;
 
-    #[ORM\OneToMany(mappedBy: 'devis', targetEntity: ProduitDevis::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'devis', targetEntity: ProduitDevis::class, cascade: ['persist'])]
     private Collection $produitDevis;
 
     public function __construct()

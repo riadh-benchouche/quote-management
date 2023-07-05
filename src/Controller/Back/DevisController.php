@@ -19,13 +19,21 @@ class DevisController extends AbstractController
     #[Route('/', name: 'app_devis_index', methods: ['GET'])]
     public function index(Request $request, DevisRepository $devisRepository,  PaginatorInterface $paginator): Response
     {
+        //initialement tri par id et si _sort_by = par exemple montant alors on tri par montant
+        $sortBy = $request->query->get('_sort_by', 'id');
+        $sortOrder = $request->query->get('_sort_order', 'asc');
+
+        $queryBuilder = $devisRepository->createQueryBuilder('devi')
+            ->orderBy('devi.' . $sortBy, $sortOrder);
+
         $devis = $paginator->paginate(
-            $devisRepository->findBy([], ['date' => 'ASC']),
+            $queryBuilder->getQuery(),
             $request->query->getInt('page', 1),
             10
         );
         return $this->render('back/devis/index.html.twig', [
             'devis' => $devis,
+            'sort_order' => $sortOrder,
         ]);
     }
 
@@ -71,6 +79,9 @@ class DevisController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($devi->getProduitDevis() as $produitDevis) {
+                $produitDevis->setDevis($devi);
+            }
             $devisRepository->save($devi, true);
 
             return $this->redirectToRoute('back_app_devis_index', [], Response::HTTP_SEE_OTHER);

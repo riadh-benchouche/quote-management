@@ -18,17 +18,13 @@ class ProduitDevisType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('quantity', NumberType::class)
-            ->add('tva', NumberType::class)
-            ->add('price', NumberType::class)
             ->add('produit', EntityType::class, [
                 'class' => Produit::class,
                 'choice_label' => 'name',
             ])
-            ->add('devis', EntityType::class, [
-                'class' => Devis::class,
-                'choice_label' => 'id',
-            ]);
+            ->add('quantity', NumberType::class)
+            ->add('price', NumberType::class)
+            ->add('tva', NumberType::class);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -10,36 +10,53 @@
 	<h3>Produits</h3>
 
 	<div class="flex flex-col">
-		{% for produitDevis in form.produitDevis %}
-			<ul id="devis-produits" class="produitDevis flex flex-1 flex-row" data-index="{{ form.produitDevis|length > 0 ? form.produitDevis|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.produitDevis.vars.prototype)|e('html_attr') }}">
-				<li>{{ form_row(produitDevis['devis']) }}</li>
-				<li>{{ form_row(produitDevis['produit']) }}</li>
-				<li>{{ form_row(produitDevis['quantity']) }}</li>
-				<li>{{ form_row(produitDevis['price']) }}</li>
-				<li>{{ form_row(produitDevis['tva']) }}</li>
-				<li id="devis_montant"></li>
-			</ul>
-		{% endfor %}
-	</div>
-	<button type="button" class="add_item_link" data-collection-holder-class="produitDevis">Ajouter un produit</button>
+		<div id="devis-produits" class="produitDevis flex flex-col" data-index="{{ form.produitDevis|length > 0 ? form.produitDevis|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.produitDevis.vars.prototype)|e('html_attr') }}">
+			{% for produitDevis in form.produitDevis %}
+				<div class="produitDevis flex flex-row">
+					<div class="flex flex-col">
+						<label>{{ produitDevis.produit.vars.name }}</label>
+						{{ form_widget(produitDevis.produit) }}
+					</div>
 
-	<hr>
+					<div class="flex flex-col">
+						<label>{{ produitDevis.quantity.vars.name }}</label>
+						{{ form_widget(produitDevis.quantity) }}
+					</div>
 
-	{{ form_row(form.montant) }}
-	{{ form_row(form.status) }}
+					<div class="flex flex-col">
+						<label>{{ produitDevis.price.vars.name }}</label>
+						{{ form_widget(produitDevis.price) }}
+					</div>
 
-	<hr>
+					<div class="flex flex-col">
+						<label>{{ produitDevis.tva.vars.name }}</label>
+						{{ form_widget(produitDevis.tva) }}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
 
-	{# Bouton pour ajouter une nouvelle ligne #}
-	<button class="btn">{{ button_label|default('Save') }}</button>
-	{{ form_end(form) }}
 
-</section>
+		<button type="button" class="add_item_link" data-collection-holder-class="produitDevis">Ajouter un produit</button>
 
-{% block javascripts %}
-	<script>
+		<hr>
 
-		const addFormToCollection = (e) => {
+		{{ form_row(form.montant) }}
+		{{ form_row(form.status) }}
+
+		<hr>
+
+		{# Bouton pour ajouter une nouvelle ligne #}
+		<button class="btn">{{ button_label|default('Save') }}</button>
+		{{ form_end(form) }}
+
+	</section>
+
+
+	{% block javascripts %}
+		<script>
+
+			const addFormToCollection = (e) => {
 const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
 
 const ul = document.createElement('ul');
@@ -51,6 +68,12 @@ item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collect
 ul.appendChild(item);
 collectionHolder.appendChild(ul);
 
+// Ajouter les classes flex et flex-row aux éléments
+const elements = ul.querySelectorAll('[id^="devis_produitDevis_"]');
+elements.forEach(element => {
+element.classList.add('flex', 'flex-row');
+});
+
 collectionHolder.dataset.index ++;
 };
 
@@ -61,37 +84,53 @@ btn.addEventListener("click", addFormToCollection)
 });
 
 // Récupérer les références des champs
-const quantiteInput = document.getElementById('devis_produitDevis_0_quantity');
-const prixHtInput = document.getElementById('devis_produitDevis_0_price');
-const tvaInput = document.getElementById('devis_produitDevis_0_tva');
+const quantiteInputs = document.querySelectorAll('[id^="devis_produitDevis_"][id$="_quantity"]');
+const prixHtInputs = document.querySelectorAll('[id^="devis_produitDevis_"][id$="_price"]');
+const tvaInputs = document.querySelectorAll('[id^="devis_produitDevis_"][id$="_tva"]');
 const montantInput = document.getElementById('devis_montant');
 
-// Fonction de mise à jour du montant
-function updateMontant() {
-const quantite = parseFloat(quantiteInput.value);
-const prixHt = parseFloat(prixHtInput.value);
-const tva = parseFloat(tvaInput.value);
+// Fonction de mise à jour du montant total
+function updateMontantTotal() {
+let montantTotal = 0;
 
-// Calculer le montant en multipliant la quantité par le prix HT
-let montant = quantite * prixHt;
+// Parcourir tous les produitsDevis
+for (let i = 0; i < quantiteInputs.length; i++) {
+const quantite = parseFloat(quantiteInputs[i].value);
+const prixHt = parseFloat(prixHtInputs[i].value);
+const tva = parseFloat(tvaInputs[i].value);
+
+// Calculer le montant du produitDevis en multipliant la quantité par le prix HT
+let montantProduit = quantite * prixHt;
 
 // Ajouter la TVA si elle est spécifiée
 if (!isNaN(tva)) {
-montant += montant * (tva / 100);
+montantProduit += montantProduit * (tva / 100);
 }
 
-// Afficher le montant avec 2 décimales
-if (!isNaN(montant)) {
-montantInput.textContent = montant.toFixed(2);
+// Ajouter le montant du produitDevis au montant total
+montantTotal += montantProduit;
+}
+
+// Afficher le montant total avec 2 décimales
+if (!isNaN(montantTotal)) {
+montantInput.value = montantTotal.toFixed(2);
 }
 }
 
 // Écouter les événements de modification des champs
-quantiteInput.addEventListener('input', updateMontant);
-prixHtInput.addEventListener('input', updateMontant);
-tvaInput.addEventListener('input', updateMontant);
+quantiteInputs.forEach(input => {
+input.addEventListener('input', updateMontantTotal);
+});
+
+prixHtInputs.forEach(input => {
+input.addEventListener('input', updateMontantTotal);
+});
+
+tvaInputs.forEach(input => {
+input.addEventListener('input', updateMontantTotal);
+});
 
 // Appeler la fonction de mise à jour initiale
-updateMontant();
-	</script>
-{% endblock %}
+updateMontantTotal();
+		</script>
+	{% endblock %}
