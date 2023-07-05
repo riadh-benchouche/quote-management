@@ -17,13 +17,22 @@ class FactureController extends AbstractController
     #[Route('/', name: 'app_facture_index', methods: ['GET'])]
     public function index(Request $request, FactureRepository $factureRepository,  PaginatorInterface $paginator): Response
     {
+
+        $sortBy = $request->query->get('_sort_by', 'id');
+        $sortOrder = $request->query->get('_sort_order', 'asc');
+
+        $queryBuilder = $factureRepository->createQueryBuilder('facture')
+            ->orderBy('facture.' . $sortBy, $sortOrder);
+
         $factures = $paginator->paginate(
-            $factureRepository->findAll(),
+            $queryBuilder->getQuery(),
             $request->query->getInt('page', 1),
             10
         );
+
         return $this->render('back/facture/index.html.twig', [
-            'factures' => $factures
+            'factures' => $factures,
+            'sort_order' => $sortOrder,
         ]);
     }
 
