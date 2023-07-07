@@ -4,11 +4,30 @@
 {% endblock %}
 
 {% block main %}
-	<h1>Edit Categorie</h1>
+	<div class="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-3">
+		<div class="px-4 sm:px-0">
+			<h2 class="text-base font-semibold leading-7 text-gray-900">Categories</h2>
+			<p class="mt-1 text-sm leading-6 text-gray-600">Modifier une catégorie de produit.</p>
+		</div>
 
-	{{ include('back/categorie/_form.html.twig', {'button_label': 'Update'}) }}
-
-	<a href="{{ path('back_app_categorie_index') }}">back to list</a>
-
+		<form method="post" class="bg-[#F1F1F1] shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2">
+			{{ form_start(form) }}
+			<div class="px-4 py-6 sm:p-8">
+				<div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+					<div class="sm:col-span-4 flex align-middle">
+						{{ form_label(form.nom, 'Nom', {'label_attr': {'class': ' mt-2 block text-sm font-medium leading-6 text-gray-900 mr-3'}}) }}
+						{{ form_widget(form.nom, {'attr': {'class': 'w-full flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-secondary sm:max-w-md'}}) }}
+					</div>
+				</div>
+			</div>
+			<div class="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
+				<a href="{{ path('back_app_categorie_index') }}" class="text-sm font-semibold leading-6 text-gray-900">Annuler</a>
+				<button type="submit" class="rounded-md bg-secondary px-3 py-2 text-sm font-semibold text-white shadow-sm">Modifier</button>
+			</div>
+			{{ form_end(form) }}
+		</form>
+	</div>
+{#
 	{{ include('back/categorie/_delete_form.html.twig') }}
+#}
 {% endblock %}
