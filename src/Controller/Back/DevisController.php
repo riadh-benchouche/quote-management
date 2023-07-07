@@ -7,11 +7,14 @@ use App\Entity\ProduitDevis;
 use App\Form\DevisType;
 use App\Form\ProduitDevisType;
 use App\Repository\DevisRepository;
+use App\Service\PdfService;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
+use Symfony\Component\HttpKernel\KernelInterface;
 
 #[Route('/devis')]
 class DevisController extends AbstractController
@@ -68,6 +71,23 @@ class DevisController extends AbstractController
             'devi' => $devi,
         ]);
     }
+
+    #[Route('/devis-pdf/{id}', name: 'app_devis_pdf', methods: ['GET'])]
+    public function showPdf(Devis $devi, PdfService $pdf): Response
+    {
+        $html = $this->renderView('back/devis/showPdf.html.twig', [
+            'devi' => $devi,
+        ]);
+
+        $pdfGenerate = $pdf->generateBinaryPdf($html);
+
+        // Renvoyer le PDF comme réponse
+        $response = new Response($pdfGenerate);
+        $response->headers->set('Content-Type', 'application/pdf');
+
+        return $response;
+    }
+
 
     #[Route('/{id}/edit', name: 'app_devis_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Devis $devi, DevisRepository $devisRepository): Response
