@@ -22,6 +22,7 @@ class DevisType extends AbstractType
             ->add('message')
             ->add('date', DateType::class, [
                 'widget' => 'single_text',
+                'required' =>true
             ])
             ->add('montant')
             ->add('status', ChoiceType::class, [

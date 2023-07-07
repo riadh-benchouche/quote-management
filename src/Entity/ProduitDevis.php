@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ProduitDevisRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProduitDevisRepository::class)]
 class ProduitDevis
@@ -15,19 +16,27 @@ class ProduitDevis
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'Le champ produit ne peut pas être vide')]
     private ?Produit $produit = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: 'Le champ quantity ne peut pas être vide')]
+    #[Assert\GreaterThan(value: 0, message: 'Le champ quantity doit être supérieur à zéro')]
     private ?int $quantity = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: 'Le champ tva ne peut pas être vide')]
+    #[Assert\GreaterThanOrEqual(value: 0, message: 'Le champ tva doit être supérieur ou égal à zéro')]
     private ?float $tva = null;
 
     #[ORM\Column]
+    #[Assert\NotNull(message: 'Le champ price ne peut pas être vide')]
+    #[Assert\GreaterThanOrEqual(value: 0, message: 'Le champ price doit être supérieur ou égal à zéro')]
     private ?float $price = null;
 
     #[ORM\ManyToOne(inversedBy: 'produitDevis')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'Le champ devis ne peut pas être vide')]
     private ?Devis $devis = null;
 
     public function getId(): ?int

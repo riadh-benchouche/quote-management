@@ -6,7 +6,7 @@ use App\Repository\ProduitRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-
+use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: ProduitRepository::class)]
 class Produit
 {
@@ -16,18 +16,26 @@ class Produit
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Le champ name est obligatoire')]
     private ?string $name = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Le champ prixHt est obligatoire')]
+    #[Assert\GreaterThanOrEqual(value: 0, message: 'Le champ prixHt doit être supérieur ou égal à zéro')]
     private ?float $prixHt = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Le champ tva est obligatoire')]
+    #[Assert\GreaterThanOrEqual(value: 0, message: 'Le champ tva doit être supérieur ou égal à zéro')]
     private ?float $tva = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Le champ montant est obligatoire')]
+    #[Assert\GreaterThanOrEqual(value: 0, message: 'Le champ montant doit être supérieur ou égal à zéro')]
     private ?float $montant = null;
 
     #[ORM\ManyToOne(inversedBy: 'produits')]
+    #[Assert\NotNull(message: 'Le champ categorie ne peut pas être vide')]
     private ?Categorie $categorie = null;
 
     public function getId(): ?int

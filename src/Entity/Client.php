@@ -6,6 +6,7 @@ use App\Repository\ClientRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ClientRepository::class)]
 class Client
@@ -16,27 +17,37 @@ class Client
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank(message: 'Le nom de l\'entreprise ne peut pas être vide.')]
+    #[Assert\Length(max: 100, maxMessage: 'Le nom de l\'entreprise ne peut pas dépasser 100 caractères.')]
     private ?string $company_name = null;
 
     #[ORM\Column(length: 100, nullable: true)]
+    #[Assert\Email(message: 'L\'adresse e-mail n\'est pas valide.')]
+    #[Assert\Length(max: 100, maxMessage: 'L\'adresse e-mail ne peut pas dépasser 100 caractères.')]
     private ?string $email = null;
 
     #[ORM\Column(length: 100, nullable: true)]
+    #[Assert\Length(max: 100, maxMessage: 'Le nom ne peut pas dépasser 100 caractères.')]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 100, nullable: true)]
+    #[Assert\Length(max: 100, maxMessage: 'Le prénom ne peut pas dépasser 100 caractères.')]
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(max: 255, maxMessage: 'L\'adresse ne peut pas dépasser 255 caractères.')]
     private ?string $address = null;
 
     #[ORM\Column(length: 5, nullable: true)]
+    #[Assert\Length(max: 5, maxMessage: 'Le code postal ne peut pas dépasser 5 caractères.')]
     private ?string $zipcode = null;
 
     #[ORM\Column(length: 100, nullable: true)]
+    #[Assert\Length(max: 100, maxMessage: 'La ville ne peut pas dépasser 100 caractères.')]
     private ?string $city = null;
 
     #[ORM\Column(length: 20, nullable: true)]
+    #[Assert\Length(max: 20, maxMessage: 'Le numéro de téléphone ne peut pas dépasser 20 caractères.')]
     private ?string $phone = null;
 
     #[ORM\OneToMany(mappedBy: 'client', targetEntity: Devis::class)]

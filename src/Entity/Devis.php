@@ -27,12 +27,15 @@ class Devis
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Le champ montant du devis est obligatoire')]
     private ?float $montant = null;
 
     #[ORM\Column(length: 50, options: ["default" => "brouillon"])]
+    #[Assert\Choice(message: 'Le status du devis doit être défini')]
     private ?string $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'devis')]
+    #[Assert\NotBlank(message: 'Le champ client du devis est obligatoire')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $client = null;
 

@@ -17,12 +17,20 @@ class ProduitDevisType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('quantity', NumberType::class)
-            ->add('tva', NumberType::class)
-            ->add('price', NumberType::class)
+            ->add('quantity', NumberType::class, [
+                'required' => true,
+            ])
+            ->add('tva', NumberType::class, [
+                'required' => true,
+            ])
+            ->add('price', NumberType::class, [
+                'required' => true,
+            ])
             ->add('produit', EntityType::class, [
                 'class' => Produit::class,
                 'choice_label' => 'name',
+                'required' => true,
+
             ])
             ->add('devis');
     }

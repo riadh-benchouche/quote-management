@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: FactureRepository::class)]
 class Facture
@@ -20,18 +21,23 @@ class Facture
     private ?string $message = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank(message: 'Le champ date de facture est obligatoire')]
     private ?\DateTimeInterface $date = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank(message: 'Le champ échéance de facture est obligatoire')]
     private ?\DateTimeInterface $echeance = null;
 
     #[ORM\Column(length: 50)]
+    #[Assert\NotBlank(message: 'Le champ statut de facture est obligatoire')]
     private ?string $status = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Le champ montant de facture est obligatoire')]
     private ?float $montant = null;
 
     #[ORM\ManyToOne(inversedBy: 'factures')]
+    #[Assert\NotBlank(message: 'Le champ client de facture est obligatoire')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Client $client = null;
 

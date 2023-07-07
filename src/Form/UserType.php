@@ -17,15 +17,19 @@ class UserType extends AbstractType
         $builder
             ->add('lastname', TextType::class, [
                 'label' => 'Nom',
+                'required' => true,
             ])
             ->add('firstname', TextType::class, [
                 'label' => 'Prénom',
+                'required' => true,
             ])
             ->add('email', EmailType::class, [
                 'label' => 'Email',
+                'required' => true,
             ])
             ->add('plainPassword', TextType::class, [
                 'label' => 'Mot de passe',
+                'required' => true,
             ])
             ->add('avatarFile', VichImageType::class, [
                 'required' => false,
