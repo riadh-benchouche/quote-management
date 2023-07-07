@@ -4,11 +4,74 @@
 {% endblock %}
 
 {% block main %}
-	<h1>Edit Client</h1>
+	<div class="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-3">
+		<div class="px-4 sm:px-0">
+			<h2 class="text-base font-semibold leading-7 text-gray-900">Clients</h2>
+			<p class="mt-1 text-sm leading-6 text-gray-600">Modifier les informations d'un client.</p>
+		</div>
 
-	{{ include('back/client/_form.html.twig', {'button_label': 'Update'}) }}
-
-	<a href="{{ path('back_app_client_index') }}">back to list</a>
-
-	{{ include('back/client/_delete_form.html.twig') }}
+		<form method="POST" class="bg-[#F1F1F1] shadow-sm ring-1 ring-gray-900/5 sm:rounded-xl md:col-span-2">
+			{{ form_start(form) }}
+			<div class="px-4 py-6 sm:p-8">
+				<div class="flex flex-col space-y-3 w-full">
+					<div class="sm:col-span-4 flex flex-1 w-full justify-between gap-6">
+						<div class="w-full">
+							{{ form_label(form.company_name, 'Nom de l\'entreprise', {'label_attr': {'class': 'block w-full text-sm font-medium leading-6 text-gray-900'}}) }}
+							{{ form_widget(form.company_name, {'attr': {'class': 'mt-2  w-full flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-secondary'}}) }}
+							{{ form_errors(form.company_name, {'attr': {'class': 'text-sm text-red-600'}}) }}
+						</div>
+					</div>
+					<div class="sm:col-span-4 flex flex-1 w-full justify-between gap-6">
+						<div class="w-full">
+							{{ form_label(form.phone, 'Téléphone', {'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900'}}) }}
+							{{ form_widget(form.phone, {'attr': {'class': 'mt-2  w-full flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-secondary'}}) }}
+							{{ form_errors(form.phone, {'attr': {'class': 'text-sm text-red-600'}}) }}
+						</div>
+						<div class="w-full">
+							{{ form_label(form.email, 'email', {'label_attr': {'class': 'block w-full text-sm font-medium leading-6 text-gray-900'}}) }}
+							{{ form_widget(form.email, {'attr': {'class': 'mt-2  w-full flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-secondary'}}) }}
+							{{ form_errors(form.email, {'attr': {'class': 'text-sm text-red-600'}}) }}
+						</div>
+					</div>
+					<div class="sm:col-span-4 flex flex-1 w-full justify-between gap-6">
+						<div class="w-full">
+							{{ form_label(form.lastname, 'Nom', {'label_attr': {'class': 'block w-full text-sm font-medium leading-6 text-gray-900'}}) }}
+							{{ form_widget(form.lastname, {'attr': {'class': 'mt-2  w-full flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-secondary'}}) }}
+							{{ form_errors(form.lastname, {'attr': {'class': 'text-sm text-red-600'}}) }}
+						</div>
+						<div class="w-full">
+							{{ form_label(form.firstname, 'Prénom', {'label_attr': {'class': 'block w-full text-sm font-medium leading-6 text-gray-900'}}) }}
+							{{ form_widget(form.firstname, {'attr': {'class': 'mt-2  w-full flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-secondary'}}) }}
+							{{ form_errors(form.firstname, {'attr': {'class': 'text-sm text-red-600'}}) }}
+						</div>
+					</div>
+					<div class="sm:col-span-4 flex flex-1 w-full justify-between gap-6">
+						<div class="w-full">
+							{{ form_label(form.address, 'Addresse', {'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900'}}) }}
+							{{ form_widget(form.address, {'attr': {'class': 'mt-2 w-full flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-secondary'}}) }}
+							{{ form_errors(form.address, {'attr': {'class': 'text-sm text-red-600'}}) }}
+						</div>
+						<div class="w-full">
+							{{ form_label(form.zipcode, 'Code postal', {'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900'}}) }}
+							{{ form_widget(form.zipcode, {'attr': {'class': 'mt-2  w-full flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-secondary'}}) }}
+							{{ form_errors(form.zipcode, {'attr': {'class': 'text-sm text-red-600'}}) }}
+						</div>
+						<div class="w-full">
+							{{ form_label(form.city, 'Ville', {'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900'}}) }}
+							{{ form_widget(form.city, {'attr': {'class': 'mt-2  w-full flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-secondary'}}) }}
+							{{ form_errors(form.city, {'attr': {'class': 'text-sm text-red-600'}}) }}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
+				<a href="{{ path('back_app_client_index') }}" class="text-sm font-semibold leading-6 text-gray-900">Annuler</a>
+				<button type="submit"
+						class="rounded-md bg-secondary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500">
+					Modifier
+				</button>
+			</div>
+			{{ form_end(form) }}
+		</form>
+	</div>
 {% endblock %}
