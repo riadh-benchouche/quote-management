@@ -4,11 +4,12 @@
 {% endblock %}
 
 {% block main %}
-	<h1>Edit Facture</h1>
+	<div class="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-3">
+		<div class="px-4 sm:px-0">
+			<h2 class="text-base font-semibold leading-7 text-gray-900">Factures</h2>
+			<p class="mt-1 text-sm leading-6 text-gray-600">Modifier la facture</p>
+		</div>
+		{{ include('back/facture/_form.html.twig', {'button_label': 'Modifier'}) }}
 
-	{{ include('back/facture/_form.html.twig', {'button_label': 'Update'}) }}
-
-	<a href="{{ path('back_app_facture_index') }}">back to list</a>
-
-	{{ include('back/facture/_delete_form.html.twig') }}
+	</div>
 {% endblock %}
