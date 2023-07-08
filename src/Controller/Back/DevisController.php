@@ -7,11 +7,15 @@ use App\Entity\ProduitDevis;
 use App\Form\DevisType;
 use App\Form\ProduitDevisType;
 use App\Repository\DevisRepository;
+use App\Service\PdfService;
+use App\Service\MailerService;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+
+use Symfony\Component\HttpKernel\KernelInterface;
 
 #[Route('/devis')]
 class DevisController extends AbstractController
@@ -68,6 +72,66 @@ class DevisController extends AbstractController
             'devi' => $devi,
         ]);
     }
+
+    #[Route('/devis-pdf/{id}', name: 'app_devis_pdf', methods: ['GET'])]
+    public function showPdf(Devis $devi, PdfService $pdf): Response
+    {
+        $html = $this->renderView('back/devis/showPdf.html.twig', [
+            'devi' => $devi,
+        ]);
+
+        $pdfGenerate = $pdf->generateBinaryPdf($html);
+
+        // Renvoyer le PDF comme réponse
+        $response = new Response($pdfGenerate);
+        $response->headers->set('Content-Type', 'application/pdf');
+
+        return $response;
+    }
+
+    #[Route('/devis-download-pdf/{id}', name: 'app_devis_download', methods: ['GET'])]
+    public function downloadPdf(Devis $devi, PdfService $pdfService): Response
+    {
+        // Générer le contenu HTML du devis
+        $html = $this->renderView('back/devis/showPdf.html.twig', [
+            'devi' => $devi,
+        ]);
+
+        $pdfService->downloadPdf($html, "devis.pdf");
+
+        // Retourner une réponse vide car le téléchargement est géré par la méthode downloadPdf()
+        return new Response();
+    }
+
+    #[Route('/send-mail-pdf/{id}', name: 'app_devis_send_mail', methods: ['GET'])]
+    public function sendMailPdf(Devis $devi, PdfService $pdfService, MailerService $mailer): Response
+    {
+        $html = $this->renderView('back/devis/showPdf.html.twig', [
+            'devi' => $devi,
+        ]);
+
+        // Générer le fichier PDF
+        $pdfGenerate = $pdfService->generateBinaryPdf($html);
+
+        // Enregistrer temporairement le fichier PDF
+        $temporaryFilePath = sys_get_temp_dir() . '/devis.pdf';
+        file_put_contents($temporaryFilePath, $pdfGenerate);
+
+        // Envoyer l'e-mail avec le devis en pièce jointe
+        $to = $devi->getClient()->getEmail(); // Récupérer l'e-mail du client depuis l'objet Devis
+        $subject = 'Votre devis'; // Sujet de l'e-mail
+        $content = 'Voici votre devis en pièce jointe.'; // Contenu du message
+        $attachmentPath = $temporaryFilePath; // Chemin du fichier PDF
+        $attachmentFileName = 'devis.pdf'; // Nom du fichier PDF
+
+        $mailer->sendEmail($to, $content, $subject, $attachmentPath, $attachmentFileName);
+
+        // Supprimer le fichier PDF temporaire
+        unlink($temporaryFilePath);
+
+        return $this->redirectToRoute('back_app_devis_show', ['id' => $devi->getId(), 'msg' => "Mail envoyé avec succès!"]);
+    }
+
 
     #[Route('/{id}/edit', name: 'app_devis_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Devis $devi, DevisRepository $devisRepository): Response

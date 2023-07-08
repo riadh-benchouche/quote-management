@@ -75,18 +75,6 @@ class Facture
         return $this;
     }
 
-    public function getQuantity(): ?int
-    {
-        return $this->quantity;
-    }
-
-    public function setQuantity(int $quantity): self
-    {
-        $this->quantity = $quantity;
-
-        return $this;
-    }
-
     public function getEcheance(): ?\DateTimeInterface
     {
         return $this->echeance;
