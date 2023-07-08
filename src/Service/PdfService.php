@@ -5,8 +5,6 @@ namespace App\Service;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
-use Symfony\Component\HttpKernel\KernelInterface;
-
 class PdfService
 {
     private $domPdf;
@@ -22,11 +20,11 @@ class PdfService
         $this->domPdf->setOptions($pdfOptions);
     }
 
-    public function showPdfFile($html)
+    public function downloadPdf($html)
     {
         $this->domPdf->loadHtml($html);
         $this->domPdf->render();
-        $this->domPdf->stream("details.pdf", [
+        $this->domPdf->stream("devis.pdf", [
             'Attachement' => true
         ]);
     }

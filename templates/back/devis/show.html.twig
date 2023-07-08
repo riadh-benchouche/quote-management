@@ -4,6 +4,10 @@
 {% endblock %}
 
 {% block main %}
+	{% if app.request.query.get('msg') is defined %}
+		<div class="bg-green-200 text-green-800 p-4 my-4">{{ app.request.query.get('msg') }}</div>
+	{% endif %}
+
 	<h1>Devis</h1>
 
 	<table class="table">
@@ -32,6 +36,10 @@
 	</table>
 
 	<a href="{{ path('back_app_devis_pdf', {'id': devi.id}) }}">Voir l'aperçu</a>
+
+	<a href="{{ path('back_app_devis_download', {'id': devi.id}) }}">Télécharger le PDF</a>
+
+	<a href="{{ path('back_app_devis_send_mail', {'id': devi.id}) }}">Envoyer par e-mail</a>
 
 	<a href="{{ path('back_app_devis_index') }}">back to list</a>
 
