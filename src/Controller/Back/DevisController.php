@@ -97,7 +97,7 @@ class DevisController extends AbstractController
             'devi' => $devi,
         ]);
 
-        $pdfService->downloadPdf($html);
+        $pdfService->downloadPdf($html, "devis.pdf");
 
         // Retourner une réponse vide car le téléchargement est géré par la méthode downloadPdf()
         return new Response();

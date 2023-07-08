@@ -20,11 +20,11 @@ class PdfService
         $this->domPdf->setOptions($pdfOptions);
     }
 
-    public function downloadPdf($html)
+    public function downloadPdf($html, $fileName)
     {
         $this->domPdf->loadHtml($html);
         $this->domPdf->render();
-        $this->domPdf->stream("devis.pdf", [
+        $this->domPdf->stream($fileName, [
             'Attachement' => true
         ]);
     }

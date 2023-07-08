@@ -17,6 +17,24 @@
 				<td>{{ devi.id }}</td>
 			</tr>
 			<tr>
+				<th>Client</th>
+				<td>{{ devi.client }}</td>
+			</tr>
+			<tr>
+				<td>{{ devi.client.lastname }}
+					{{ devi.client.firstname }}</td>
+			</tr>
+			<tr>
+				<td>{{ devi.client.address }}</td>
+			</tr>
+			<tr>
+				<td>{{ devi.client.zipcode }}
+					{{ devi.client.city }}</td>
+			</tr>
+			<tr>
+				<td>{{ devi.client.phone }}</td>
+			</tr>
+			<tr>
 				<th>Message</th>
 				<td>{{ devi.message }}</td>
 			</tr>
@@ -24,9 +42,36 @@
 				<th>Date</th>
 				<td>{{ devi.date ? devi.date|date('Y-m-d') : '' }}</td>
 			</tr>
+
+			<tr>
+				<th>Produit</th>
+				<th>
+					Quantité
+				</th>
+				<th>
+					Prix
+				</th>
+				<th>
+					Tva
+				</th>
+				<th>
+					Total
+				</th>
+				{% for produit in devi.produitDevis %}
+					<tr>
+						<td style="width: 25%; padding: 0.5rem; border: 1px solid #000000; text-align: center">{{ produit.produit }}</td>
+						<td style="width: 15%; padding: 0.5rem; border: 1px solid #000000; text-align: center">{{ produit.quantity }}</td>
+						<td style="width: 20%; padding: 0.5rem; border: 1px solid #000000; text-align: center">{{ produit.price }}€</td>
+						<td style="width: 15%; padding: 0.5rem; border: 1px solid #000000; text-align: center">{{ produit.tva }}%</td>
+						<td style="width: 25%; padding: 0.5rem; border: 1px solid #000000; text-align: center">{{ (produit.price * produit.quantity * (1 + produit.tva/100))|number_format(2, '.', ' ') }}€</td>
+					</tr>
+				{% endfor %}
+
+			</tr>
+
 			<tr>
 				<th>Montant</th>
-				<td>{{ devi.montant }}</td>
+				<td>{{ devi.montant }}€</td>
 			</tr>
 			<tr>
 				<th>Status</th>
@@ -35,15 +80,24 @@
 		</tbody>
 	</table>
 
-	<a href="{{ path('back_app_devis_pdf', {'id': devi.id}) }}">Voir l'aperçu</a>
+	<ul>
+		<li>
+			<a href="{{ path('back_app_devis_pdf', {'id': devi.id}) }}">Voir l'aperçu</a>
+		</li>
+		<li>
+			<a href="{{ path('back_app_devis_download', {'id': devi.id}) }}">Télécharger le PDF</a>
+		</li>
+		<li>
+			<a href="{{ path('back_app_devis_send_mail', {'id': devi.id}) }}">Envoyer par e-mail</a>
+		</li>
+		<li>
+			<a href="{{ path('back_app_devis_index') }}">back to list</a>
+		</li>
+		<li>
+			<a href="{{ path('back_app_devis_edit', {'id': devi.id}) }}">edit</a>
+		</li>
+	</ul>
 
-	<a href="{{ path('back_app_devis_download', {'id': devi.id}) }}">Télécharger le PDF</a>
-
-	<a href="{{ path('back_app_devis_send_mail', {'id': devi.id}) }}">Envoyer par e-mail</a>
-
-	<a href="{{ path('back_app_devis_index') }}">back to list</a>
-
-	<a href="{{ path('back_app_devis_edit', {'id': devi.id}) }}">edit</a>
 
 	{{ include('back/devis/_delete_form.html.twig') }}
 {% endblock %}
