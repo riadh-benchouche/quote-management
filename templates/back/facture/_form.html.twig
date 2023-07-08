@@ -1,4 +1,137 @@
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<section id="form-facture">
+	{{ form_start(form) }}
+
+	{{ form_row(form.client, {'empty_data': null, 'placeholder': 'Sélectionner un client'}) }}
+	<hr>
+	{{ form_row(form.date) }}
+	{{ form_row(form.echeance) }}
+	{{ form_row(form.message) }}
+	<hr>
+
+	<h3>Produits</h3>
+
+	<div class="flex flex-col">
+		<div id="devis-facture" class="produitFacture flex flex-col" data-index="{{ form.produitFacture|length > 0 ? form.produitFacture|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.produitFacture.vars.prototype)|e('html_attr') }}">
+			{% for produitFacture in form.produitFacture %}
+				<div class="produitDevis flex flex-row">
+					<div class="flex flex-col">
+						<label>{{ produitFacture.produit.vars.name }}</label>
+						{{ form_widget(produitFacture.produit) }}
+					</div>
+
+					<div class="flex flex-col">
+						<label>{{ produitFacture.quantity.vars.name }}</label>
+						{{ form_widget(produitFacture.quantity) }}
+					</div>
+
+					<div class="flex flex-col">
+						<label>{{ produitFacture.price.vars.name }}</label>
+						{{ form_widget(produitFacture.price) }}
+					</div>
+
+					<div class="flex flex-col">
+						<label>{{ produitFacture.tva.vars.name }}</label>
+						{{ form_widget(produitFacture.tva) }}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+
+
+		<button type="button" class="add_item_link" data-collection-holder-class="produitFacture">Ajouter un produit</button>
+
+		<hr>
+
+		{{ form_row(form.montant) }}
+		{{ form_row(form.status) }}
+
+		<hr>
+
+		{# Bouton pour ajouter une nouvelle ligne #}
+		<button class="btn">{{ button_label|default('Save') }}</button>
+		{{ form_end(form) }}
+
+	</section>
+
+
+	{% block javascripts %}
+		<script>
+
+			const addFormToCollection = (e) => {
+const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+
+const ul = document.createElement('ul');
+ul.classList.add('flex', 'flex-1', 'flex-row');
+
+const item = document.createElement('li');
+item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.dataset.index);
+
+ul.appendChild(item);
+collectionHolder.appendChild(ul);
+
+// Ajouter les classes flex et flex-row aux éléments
+const elements = ul.querySelectorAll('[id^="facture_produitFacture_"]');
+elements.forEach(element => {
+element.classList.add('flex', 'flex-row');
+});
+
+collectionHolder.dataset.index ++;
+};
+
+
+// Add product dynamically
+document.querySelectorAll('.add_item_link').forEach(btn => {
+btn.addEventListener("click", addFormToCollection)
+});
+
+// Récupérer les références des champs
+const quantiteInputs = document.querySelectorAll('[id^="facture_produitFacture_"][id$="_quantity"]');
+const prixHtInputs = document.querySelectorAll('[id^="facture_produitFacture_"][id$="_price"]');
+const tvaInputs = document.querySelectorAll('[id^="facture_produitFacture_"][id$="_tva"]');
+const montantInput = document.getElementById('facture_montant');
+
+// Fonction de mise à jour du montant total
+function updateMontantTotal() {
+let montantTotal = 0;
+
+// Parcourir tous les produitsDevis
+for (let i = 0; i < quantiteInputs.length; i++) {
+const quantite = parseFloat(quantiteInputs[i].value);
+const prixHt = parseFloat(prixHtInputs[i].value);
+const tva = parseFloat(tvaInputs[i].value);
+
+// Calculer le montant du produitFacture en multipliant la quantité par le prix HT
+let montantProduit = quantite * prixHt;
+
+// Ajouter la TVA si elle est spécifiée
+if (!isNaN(tva)) {
+montantProduit += montantProduit * (tva / 100);
+}
+
+// Ajouter le montant du produitFacture au montant total
+montantTotal += montantProduit;
+}
+
+// Afficher le montant total avec 2 décimales
+if (!isNaN(montantTotal)) {
+montantInput.value = montantTotal.toFixed(2);
+}
+}
+
+// Écouter les événements de modification des champs
+quantiteInputs.forEach(input => {
+input.addEventListener('input', updateMontantTotal);
+});
+
+prixHtInputs.forEach(input => {
+input.addEventListener('input', updateMontantTotal);
+});
+
+tvaInputs.forEach(input => {
+input.addEventListener('input', updateMontantTotal);
+});
+
+// Appeler la fonction de mise à jour initiale
+updateMontantTotal();
+		</script>
+	{% endblock %}

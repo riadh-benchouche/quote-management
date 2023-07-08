@@ -173,4 +173,9 @@ class Devis
 
         return $this;
     }
+
+    public function removeProduit(ProduitDevis $produitDevis): void
+    {
+        $this->produitDevis->removeElement($produitDevis);
+    }
 }

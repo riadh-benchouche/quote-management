@@ -38,7 +38,7 @@ class Facture
     #[ORM\ManyToOne(inversedBy: 'factures')]
     private ?Devis $devis = null;
 
-    #[ORM\OneToMany(mappedBy: 'facture', targetEntity: ProduitFacture::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'facture', targetEntity: ProduitFacture::class, cascade: ['persist'])]
     private Collection $produitFacture;
 
     public function __construct()

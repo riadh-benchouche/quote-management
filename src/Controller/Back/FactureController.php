@@ -46,6 +46,9 @@ class FactureController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($facture->getProduitFacture() as $produitFacture) {
+                $produitFacture->setFacture($facture);
+            }
             $factureRepository->save($facture, true);
 
             return $this->redirectToRoute('back_app_facture_index', [], Response::HTTP_SEE_OTHER);
@@ -131,6 +134,9 @@ class FactureController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($facture->getProduitFacture() as $produitFacture) {
+                $produitFacture->setFacture($facture);
+            }
             $factureRepository->save($facture, true);
 
             return $this->redirectToRoute('back_app_facture_index', [], Response::HTTP_SEE_OTHER);
