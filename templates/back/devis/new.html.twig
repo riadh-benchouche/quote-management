@@ -4,9 +4,12 @@
 {% endblock %}
 
 {% block main %}
-	<h1>Create new Devis</h1>
+	<div class="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-3">
+		<div class="px-4 sm:px-0">
+			<h2 class="text-base font-semibold leading-7 text-gray-900">Devis</h2>
+			<p class="mt-1 text-sm leading-6 text-gray-600">Ajouter un nouveau devis</p>
+		</div>
+		{{ include('back/devis/_form.html.twig') }}
 
-	{{ include('back/devis/_form.html.twig') }}
-
-	<a href="{{ path('back_app_devis_index') }}">back to list</a>
+	</div>
 {% endblock %}

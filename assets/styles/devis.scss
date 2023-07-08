@@ -1,19 +1,15 @@
-#form-devis {
-    form {
-        textarea, input, select {
-            @apply
-            block w-96 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6
-        }
-        #devis_date {
-            @apply
-            flex flex-1 space-x-2
-        }
-        #devis-produits li div input {
-            @apply
-            block w-20
-        }
-        background-color: rgb(213, 208, 208);
-        @apply
-        px-8 py-10
-    }
+#devis-produits {
+  label {
+    @apply
+    block text-sm font-medium leading-6 text-gray-900
+  }
+  input {
+    @apply
+    mt-2 w-full flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-secondary
+  }
+  select {
+    @apply
+    mt-2 w-full flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-secondary
+  }
+
 }
