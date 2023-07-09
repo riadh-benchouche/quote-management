@@ -130,7 +130,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 
     public function getLastname(): ?string
@@ -218,9 +218,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->plainPassword = $plainPassword;
 
-        if ($plainPassword) {
-            $this->password = password_hash($plainPassword, PASSWORD_BCRYPT);
-        }
+        return $this;
+        // if ($plainPassword) {
+        //     $this->password = password_hash($plainPassword, PASSWORD_BCRYPT);
+        // }
     }
 
     public function getPlainPassword(): ?string
