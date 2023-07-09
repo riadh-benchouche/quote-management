@@ -1,0 +1,54 @@
+{% block main %}
+	<div style="text-align: right;">
+		<h2 style="font-size: 1.5rem;">Devis
+			{{ devi.id }}</h2>
+		<p style="font-size: 0.875rem;">Date:
+			{{ devi.date ? devi.date|date('d/m/Y') : '' }}</p>
+	</div>
+
+	<div>
+		<h3 style="font-size: 1.25rem;">Informations client</h3>
+		<p style="font-size: 0.875rem;">
+			{{ devi.client }}</p>
+		<p style="font-size: 0.875rem;">
+			{{ devi.client.address }}</p>
+		<p style="font-size: 0.875rem;">
+			{{ devi.client.zipcode }}
+			{{ devi.client.city }}</p>
+		<p style="font-size: 0.875rem;">
+			{{ devi.client.phone }}</p>
+	</div>
+
+	<div style="margin-top: 1rem;">
+		<table style="width: 100%; border-collapse: collapse;">
+			<thead>
+				<tr style="background-color: #888888;">
+					<th style="padding: 0.5rem; border: 1px solid #000000;">Produit</th>
+					<th style="padding: 0.5rem; border: 1px solid #000000;">Quantité</th>
+					<th style="padding: 0.5rem; border: 1px solid #000000;">Prix unitaire HT</th>
+					<th style="padding: 0.5rem; border: 1px solid #000000;">TVA</th>
+					<th style="padding: 0.5rem; border: 1px solid #000000;">Montant</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for produit in devi.produitDevis %}
+					<tr>
+						<td style="padding: 0.5rem; border: 1px solid #000000; text-align: center">{{ produit.produit }}</td>
+						<td style="padding: 0.5rem; border: 1px solid #000000; text-align: center">{{ produit.quantity }}</td>
+						<td style="padding: 0.5rem; border: 1px solid #000000; text-align: center">{{ produit.price }}€</td>
+						<td style="padding: 0.5rem; border: 1px solid #000000; text-align: center">{{ produit.tva }}%</td>
+						<td style="padding: 0.5rem; border: 1px solid #000000; text-align: center">{{ (produit.price * produit.quantity * (1 + produit.tva/100))|number_format(2, '.', ' ') }}€</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+			<tfoot>
+				<tr>
+					<td colspan="4"></td>
+					<th style="padding: 0.5rem; border: 1px solid #000000;">Total TTC</th>
+					<td style="padding: 0.5rem; border: 1px solid #000000;">{{ devi.montant }}
+						€</td>
+				</tr>
+			</tfoot>
+		</table>
+	</div>
+{% endblock %}

@@ -17,13 +17,23 @@ class CategorieController extends AbstractController
     #[Route('/', name: 'app_categorie_index', methods: ['GET'])]
     public function index(Request $request, CategorieRepository $categorieRepository, PaginatorInterface $paginator): Response
     {
+
+        $sortBy = $request->query->get('_sort_by', 'id');
+        $sortOrder = $request->query->get('_sort_order', 'asc');
+
+        $queryBuilder = $categorieRepository->createQueryBuilder('categorie')
+            ->orderBy('categorie.' . $sortBy, $sortOrder);
+
+
         $categories = $paginator->paginate(
-            $categorieRepository->findAll(),
+            $queryBuilder->getQuery(),
             $request->query->getInt('page', 1),
             10
         );
+
         return $this->render('back/categorie/index.html.twig', [
             'categories' => $categories,
+            'sort_order' => $sortOrder,
         ]);
     }
 

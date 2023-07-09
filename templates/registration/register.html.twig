@@ -4,31 +4,60 @@
 {% endblock %}
 
 {% block body %}
-	<div class="bg-lime-400">
-		{% for flash_error in app.flashes('verify_email_error') %}
-			<div class="alert alert-danger" role="alert">{{ flash_error }}</div>
-		{% endfor %}
+	<div class="flex h-screen">
+		<div class="flex flex-1 flex-col justify-center px-4 py-12 sm:px-6 lg:flex-none lg:px-20 xl:px-24">
+			<div class="mx-auto w-full max-w-sm lg:w-96">
+				<div>
+					<img class="h-10 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+						 alt="Your Company">
+					<h2 class="mt-8 text-2xl font-bold leading-9 tracking-tight text-gray-900">Inscrivez vous</h2>
+					<p class="mt-2 text-sm leading-6 text-gray-500">
+						Vous avez déjà un compte ?
+						<a href="{{ path('app_login') }}"
+						   class="font-semibold text-primary hover:text-primary/80">Connectez-vous</a>
+					</p>
+				</div>
 
-		<h1>Inscription</h1>
-
-		{{ form_start(registrationForm) }}
-		{{ form_row(registrationForm.lastname) }}
-		{{ form_row(registrationForm.firstname) }}
-		{{ form_row(registrationForm.email) }}
-		{# {{ form_row(registrationForm.adress) }}
-				{{ form_row(registrationForm.zipcode) }}
-				{{ form_row(registrationForm.city) }} #}
-		{{ form_row(registrationForm.password, {
-                label: 'Password'
-            }) }}
-		{{ form_row(registrationForm.agreeTerms) }}
-
-		<button type="submit" class="btn bg-red-400">M'inscrire</button>
-		{{ form_end(registrationForm) }}
-
+				<div class="mt-10">
+					<div>
+						<form method="POST" class="space-y-6">
+							{{ form_start(registrationForm) }}
+							<div>
+								{{ form_label(registrationForm.lastname, 'Nom', {'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900'}}) }}
+								{{ form_widget(registrationForm.lastname, {'attr': {'class': 'block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6'}}) }}
+							</div>
+							<div>
+								{{ form_label(registrationForm.firstname, 'Prénom', {'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900'}}) }}
+								{{ form_widget(registrationForm.firstname, {'attr': {'class': 'block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6'}}) }}
+							</div>
+							<div>
+								{{ form_label(registrationForm.email, 'Email', {'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900'}}) }}
+								{{ form_widget(registrationForm.email, {'attr': {'class': 'block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6'}}) }}
+							</div>
+							<div>
+								{{ form_label(registrationForm.password, 'Mot de pass', {'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900'}}) }}
+								{{ form_widget(registrationForm.password, {'attr': {'class': 'block w-full rounded-md border-0 py-1.5 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6'}}) }}
+							</div>
+							<div class="flex ">
+								{{ form_label(registrationForm.agreeTerms, 'Accepter les termes et conditions', {'label_attr': {'class': ' block text-sm leading-6 text-gray-900'}}) }}
+								{{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'ml-3 h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary mt-1'}}) }}
+							</div>
+							<div>
+								<button type="submit"
+										class="flex w-full justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-primary/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
+									M'inscrire
+								</button>
+							</div>
+							{{ form_end(registrationForm) }}
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="relative hidden w-0 flex-1 lg:block">
+			<img class="absolute inset-0 h-full w-full object-cover"
+				 src="https://images.unsplash.com/photo-1496917756835-20cb06e75b4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1908&q=80"
+				 alt="">
+		</div>
 	</div>
-	<div class="mb-3">
-		<a href="{{ path('app_login') }}">Connecte-toi</a>
-	</div>
-
 {% endblock %}

@@ -42,7 +42,7 @@ class Devis
     #[ORM\OneToMany(mappedBy: 'devis', targetEntity: Facture::class)]
     private Collection $factures;
 
-    #[ORM\OneToMany(mappedBy: 'devis', targetEntity: ProduitDevis::class, orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'devis', targetEntity: ProduitDevis::class, cascade: ['persist'])]
     private Collection $produitDevis;
 
     public function __construct()
@@ -159,7 +159,7 @@ class Devis
     {
         if (!$this->produitDevis->contains($produitDevi)) {
             $this->produitDevis->add($produitDevi);
-            $produitDevi->setDevisId($this);
+            $produitDevi->setDevis($this);
         }
 
         return $this;
@@ -169,11 +169,16 @@ class Devis
     {
         if ($this->produitDevis->removeElement($produitDevi)) {
             // set the owning side to null (unless already changed)
-            if ($produitDevi->getDevisId() === $this) {
-                $produitDevi->setDevisId(null);
+            if ($produitDevi->getDevis() === $this) {
+                $produitDevi->setDevis(null);
             }
         }
 
         return $this;
+    }
+
+    public function removeProduit(ProduitDevis $produitDevis): void
+    {
+        $this->produitDevis->removeElement($produitDevis);
     }
 }

@@ -16,6 +16,8 @@ class Categorie
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\NotBlank(message: 'Le nom de la catégorie est obligatoire')]
+    #[Assert\Type(type: 'string', message: 'Le nom de la catégorie doit être une chaîne de caractères')]
     #[ORM\Column(length: 100)]
     #[Assert\NotBlank(message: 'Le nom ne peut pas être vide.')]
     #[Assert\Length(max: 100, maxMessage: 'Le nom ne peut pas dépasser 100 caractères.')]
