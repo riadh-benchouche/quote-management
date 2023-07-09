@@ -3,8 +3,11 @@
 namespace App\Controller\Back;
 
 use App\Entity\Client;
+use App\Entity\Devis;
 use App\Form\ClientType;
 use App\Repository\ClientRepository;
+use App\Repository\DevisRepository;
+use App\Repository\FactureRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,10 +44,14 @@ class ClientController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_client_show', methods: ['GET'])]
-    public function show(Client $client): Response
+    public function show(Client $client, DevisRepository $devisRepository, FactureRepository $factureRepository): Response
     {
+        $devis = $devisRepository->findBy(['client' => $client->getId()]);
+        $facture = $factureRepository->findBy(['client' => $client->getId()]);
         return $this->render('back/client/show.html.twig', [
             'client' => $client,
+            'devis' => $devis,
+            'factures' => $facture
         ]);
     }
 
