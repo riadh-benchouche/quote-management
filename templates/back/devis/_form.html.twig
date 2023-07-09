@@ -30,12 +30,10 @@
 				</div>
 			</div>
 			<div>
-				<div id="devis-produits" class="produitDevis flex flex-col"
-					 data-index="{{ form.produitDevis|length > 0 ? form.produitDevis|last.vars.name + 1 : 0 }}"
-					 data-prototype="{{ form_widget(form.produitDevis.vars.prototype)|e('html_attr') }}">
+				<div id="devis-produits" class="produitDevis flex flex-col" data-index="{{ form.produitDevis|length > 0 ? form.produitDevis|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.produitDevis.vars.prototype)|e('html_attr') }}">
 					{% for produitDevis in form.produitDevis %}
-						<div class="flex flex-1 justify-between gap-x-2 mt-2">
-							<div >
+						<div class="produitDevisLine flex flex-1 justify-between gap-x-2 mt-2">
+							<div>
 								{{ form_label(produitDevis.produit, 'Produit' ,{'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900'}}) }}
 								{{ form_widget(produitDevis.produit, {'attr': {'class': 'mt-2 w-full flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-secondary'}}) }}
 								{{ form_errors(produitDevis.produit, {'attr': {'class': 'text-sm text-red-600'}}) }}
@@ -45,12 +43,12 @@
 								{{ form_widget(produitDevis.quantity, {'attr': {'class': 'mt-2  w-full flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-secondary'}}) }}
 								{{ form_errors(produitDevis.quantity, {'attr': {'class': 'text-sm text-red-600'}}) }}
 							</div>
-							<div >
+							<div>
 								{{ form_label(produitDevis.price, 'Prix' ,{'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900'}}) }}
 								{{ form_widget(produitDevis.price, {'attr': {'class': 'mt-2  w-full flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-secondary'}}) }}
 								{{ form_errors(produitDevis.price, {'attr': {'class': 'text-sm text-red-600'}}) }}
 							</div>
-							<div >
+							<div>
 								{{ form_label(produitDevis.tva, 'Tva' ,{'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900'}}) }}
 								{{ form_widget(produitDevis.tva, {'attr': {'class': 'mt-2  w-full flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-secondary'}}) }}
 								{{ form_errors(produitDevis.tva, {'attr': {'class': 'text-sm text-red-600'}}) }}
@@ -65,10 +63,8 @@
 					<div class="w-full border-t border-gray-300"></div>
 				</div>
 				<div class="relative flex justify-center">
-					<button type="button" data-collection-holder-class="produitDevis"
-							class="add_item_link inline-flex items-center gap-x-1.5 rounded-full bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-						<svg class="-ml-1 -mr-0.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
-							 aria-hidden="true">
+					<button type="button" data-collection-holder-class="produitDevis" class="add_item_link inline-flex items-center gap-x-1.5 rounded-full bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+						<svg class="-ml-1 -mr-0.5 h-5 w-5 text-gray-400" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
 							<path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"/>
 						</svg>
 						Ajouter un produit
@@ -91,8 +87,7 @@
 	</div>
 	<div class="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
 		<a href="{{ path('back_app_devis_index') }}" class="text-sm font-semibold leading-6 text-gray-900">Annuler</a>
-		<button type="submit"
-				class="rounded-md bg-secondary px-3 py-2 text-sm font-semibold text-white shadow-sm">
+		<button type="submit" class="rounded-md bg-secondary px-3 py-2 text-sm font-semibold text-white shadow-sm">
 			{{ button_label|default('Ajouter') }}
 		</button>
 	</div>
@@ -101,99 +96,120 @@
 
 {% block javascripts %}
 	<script>
-		const addFormToCollection = (e) => {
-			const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
 
-			const ul = document.createElement('ul');
-			ul.classList.add('flex', 'flex-1', 'flex-row');
+		const addTagFormDeleteLink = (item) => {
+const removeFormButton = document.createElement('button');
+removeFormButton.innerText = 'Delete this tag';
 
-			const item = document.createElement('li');
-			item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.dataset.index);
+item.append(removeFormButton);
 
-			ul.appendChild(item);
-			collectionHolder.appendChild(ul);
+removeFormButton.addEventListener('click', (e) => {
+e.preventDefault();
+// remove the li for the tag form
+item.remove();
+});
+}
 
-			// Ajouter les classes flex et flex-row aux éléments
-			const elements = ul.querySelectorAll('[id^="devis_produitDevis_"]');
-			elements.forEach(element => {
-				element.classList.add('flex', 'flex-row', 'gap-x-2', 'sm:col-span-4', 'flex-1', 'w-full', 'justify-between');
-			});
+const addFormToCollection = (e) => {
+const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
 
-			collectionHolder.dataset.index++;
+const ul = document.createElement('ul');
+ul.classList.add('flex', 'flex-1', 'flex-row');
 
-			const quantiteInputs = document.querySelectorAll('[id^="devis_produitDevis_"][id$="_quantity"]');
-			const prixHtInputs = document.querySelectorAll('[id^="devis_produitDevis_"][id$="_price"]');
-			const tvaInputs = document.querySelectorAll('[id^="devis_produitDevis_"][id$="_tva"]');
-			updateMontantTotal();
+const item = document.createElement('li');
+item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.dataset.index);
 
-			quantiteInputs.forEach(input => {
-				input.addEventListener('change', updateMontantTotal);
-			});
+ul.appendChild(item);
+collectionHolder.appendChild(ul);
 
-			prixHtInputs.forEach(input => {
-				input.addEventListener('change', updateMontantTotal);
-			});
+// Ajouter les classes flex et flex-row aux éléments
+const elements = ul.querySelectorAll('[id^="devis_produitDevis_"]');
+elements.forEach(element => {
+element.classList.add('flex', 'flex-row', 'gap-x-2', 'sm:col-span-4', 'flex-1', 'w-full', 'justify-between');
+});
 
-			tvaInputs.forEach(input => {
-				input.addEventListener('change', updateMontantTotal);
-			});
-		};
+collectionHolder.dataset.index ++;
 
+const quantiteInputs = document.querySelectorAll('[id^="devis_produitDevis_"][id$="_quantity"]');
+const prixHtInputs = document.querySelectorAll('[id^="devis_produitDevis_"][id$="_price"]');
+const tvaInputs = document.querySelectorAll('[id^="devis_produitDevis_"][id$="_tva"]');
+updateMontantTotal();
 
-		// Add product dynamically
-		document.querySelectorAll('.add_item_link').forEach(btn => {
-			btn.addEventListener("click", addFormToCollection)
-		});
+quantiteInputs.forEach(input => {
+input.addEventListener('change', updateMontantTotal);
+});
 
-		// Récupérer les références des champs
+prixHtInputs.forEach(input => {
+input.addEventListener('change', updateMontantTotal);
+});
 
-			// Fonction de mise à jour du montant total
-		function updateMontantTotal() {
-			let montantTotal = 0;
-			const quantiteInputs = document.querySelectorAll('[id^="devis_produitDevis_"][id$="_quantity"]');
-			const prixHtInputs = document.querySelectorAll('[id^="devis_produitDevis_"][id$="_price"]');
-			const tvaInputs = document.querySelectorAll('[id^="devis_produitDevis_"][id$="_tva"]');
-			const montantInput = document.getElementById('devis_montant');
+tvaInputs.forEach(input => {
+input.addEventListener('change', updateMontantTotal);
+});
 
-			// Écouter les événements de modification des champs
-			quantiteInputs.forEach(input => {
-				input.addEventListener('change', updateMontantTotal);
-			});
+addTagFormDeleteLink(item);
 
-			prixHtInputs.forEach(input => {
-				input.addEventListener('change', updateMontantTotal);
-			});
-
-			tvaInputs.forEach(input => {
-				input.addEventListener('change', updateMontantTotal);
-			});
-
-			// Parcourir tous les produitsDevis
-			for (let i = 0; i < quantiteInputs.length; i++) {
-				const quantite = parseFloat(quantiteInputs[i].value);
-				const prixHt = parseFloat(prixHtInputs[i].value);
-				const tva = parseFloat(tvaInputs[i].value);
-
-			// Calculer le montant du produitDevis en multipliant la quantité par le prix HT
-			let montantProduit = quantite * prixHt;
-
-			// Ajouter la TVA si elle est spécifiée
-				if (!isNaN(tva)) {
-					montantProduit += montantProduit * (tva / 100);
-				}
-
-			// Ajouter le montant du produitDevis au montant total
-				montantTotal += montantProduit;
-			}
-
-			// Afficher le montant total avec 2 décimales
-			if (!isNaN(montantTotal)) {
-				montantInput.value = montantTotal.toFixed(2);
-			}
-		}
+};
 
 
-		// Appeler la fonction de mise à jour initiale
-		updateMontantTotal();
+// Add product dynamically
+document.querySelectorAll('.add_item_link').forEach(btn => {
+btn.addEventListener("click", addFormToCollection)
+});
+
+document.querySelectorAll('.produitDevisLine').forEach((tag) => {
+addTagFormDeleteLink(tag)
+})
+
+// Récupérer les références des champs
+
+// Fonction de mise à jour du montant total
+function updateMontantTotal() {
+let montantTotal = 0;
+const quantiteInputs = document.querySelectorAll('[id^="devis_produitDevis_"][id$="_quantity"]');
+const prixHtInputs = document.querySelectorAll('[id^="devis_produitDevis_"][id$="_price"]');
+const tvaInputs = document.querySelectorAll('[id^="devis_produitDevis_"][id$="_tva"]');
+const montantInput = document.getElementById('devis_montant');
+
+// Écouter les événements de modification des champs
+quantiteInputs.forEach(input => {
+input.addEventListener('change', updateMontantTotal);
+});
+
+prixHtInputs.forEach(input => {
+input.addEventListener('change', updateMontantTotal);
+});
+
+tvaInputs.forEach(input => {
+input.addEventListener('change', updateMontantTotal);
+});
+
+// Parcourir tous les produitsDevis
+for (let i = 0; i < quantiteInputs.length; i++) {
+const quantite = parseFloat(quantiteInputs[i].value);
+const prixHt = parseFloat(prixHtInputs[i].value);
+const tva = parseFloat(tvaInputs[i].value);
+
+// Calculer le montant du produitDevis en multipliant la quantité par le prix HT
+let montantProduit = quantite * prixHt;
+
+// Ajouter la TVA si elle est spécifiée
+if (!isNaN(tva)) {
+montantProduit += montantProduit * (tva / 100);
+}
+
+// Ajouter le montant du produitDevis au montant total
+montantTotal += montantProduit;
+}
+
+// Afficher le montant total avec 2 décimales
+if (!isNaN(montantTotal)) {
+montantInput.value = montantTotal.toFixed(2);
+}
+}
+
+
+// Appeler la fonction de mise à jour initiale
+updateMontantTotal();
 	</script>
 {% endblock %}

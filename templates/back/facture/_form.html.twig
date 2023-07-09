@@ -37,11 +37,9 @@
 				</div>
 			</div>
 			<div>
-				<div id="devis-produits" class="produitDevis flex flex-col"
-					 data-index="{{ form.produitFacture|length > 0 ? form.produitFacture|last.vars.name + 1 : 0 }}"
-					 data-prototype="{{ form_widget(form.produitFacture.vars.prototype)|e('html_attr') }}">
+				<div id="devis-factures" class="produitFacture flex flex-col" data-index="{{ form.produitFacture|length > 0 ? form.produitFacture|last.vars.name + 1 : 0 }}" data-prototype="{{ form_widget(form.produitFacture.vars.prototype)|e('html_attr') }}">
 					{% for produitFacture in form.produitFacture %}
-						<div class="flex flex-1 justify-between gap-x-2 mt-2">
+						<div class="produitFactureLine flex flex-1 justify-between gap-x-2 mt-2">
 							<div>
 								{{ form_label(produitFacture.produit, 'Produit' ,{'label_attr': {'class': 'block text-sm font-medium leading-6 text-gray-900'}}) }}
 								{{ form_widget(produitFacture.produit, {'attr': {'class': 'mt-2 w-full flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-secondary'}}) }}
@@ -72,10 +70,8 @@
 					<div class="w-full border-t border-gray-300"></div>
 				</div>
 				<div class="relative flex justify-center">
-					<button type="button" data-collection-holder-class="produitDevis"
-							class="add_item_link inline-flex items-center gap-x-1.5 rounded-full bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-						<svg class="-ml-1 -mr-0.5 h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor"
-							 aria-hidden="true">
+					<button type="button" data-collection-holder-class="produitDevis" class="add_item_link inline-flex items-center gap-x-1.5 rounded-full bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+						<svg class="-ml-1 -mr-0.5 h-5 w-5 text-gray-400" viewbox="0 0 20 20" fill="currentColor" aria-hidden="true">
 							<path d="M10.75 4.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"/>
 						</svg>
 						Ajouter un produit
@@ -97,9 +93,8 @@
 		</div>
 	</div>
 	<div class="flex items-center justify-end gap-x-6 border-t border-gray-900/10 px-4 py-4 sm:px-8">
-		<a href="{{ path('back_app_devis_index') }}" class="text-sm font-semibold leading-6 text-gray-900">Annuler</a>
-		<button type="submit"
-				class="rounded-md bg-secondary px-3 py-2 text-sm font-semibold text-white shadow-sm">
+		<a href="{{ path('back_app_facture_index') }}" class="text-sm font-semibold leading-6 text-gray-900">Annuler</a>
+		<button type="submit" class="rounded-md bg-secondary px-3 py-2 text-sm font-semibold text-white shadow-sm">
 			{{ button_label|default('Ajouter') }}
 		</button>
 	</div>
@@ -108,85 +103,107 @@
 {% block javascripts %}
 	<script>
 
-		const addFormToCollection = (e) => {
-			const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
+		const addTagFormDeleteLink = (item) => {
+const removeFormButton = document.createElement('button');
+removeFormButton.innerText = 'Delete this tag';
 
-			const ul = document.createElement('ul');
-			ul.classList.add('flex', 'flex-1', 'flex-row');
+item.append(removeFormButton);
 
-			const item = document.createElement('li');
-			item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.dataset.index);
+removeFormButton.addEventListener('click', (e) => {
+e.preventDefault();
+// remove the li for the tag form
+item.remove();
+});
+}
 
-			ul.appendChild(item);
-			collectionHolder.appendChild(ul);
+const addFormToCollection = (e) => {
+const collectionHolder = document.querySelector('.' + e.currentTarget.dataset.collectionHolderClass);
 
-			const elements = ul.querySelectorAll('[id^="facture_produitFacture_"]');
-			elements.forEach(element => {
-				element.classList.add('flex', 'flex-row', 'gap-x-2', 'sm:col-span-4', 'flex-1', 'w-full', 'justify-between');
-			});
+const ul = document.createElement('ul');
+ul.classList.add('flex', 'flex-1', 'flex-row');
 
-			const quantiteInputs = document.querySelectorAll('[id^="facture_produitFacture_"][id$="_quantity"]');
-			const prixHtInputs = document.querySelectorAll('[id^="facture_produitFacture_"][id$="_price"]');
-			const tvaInputs = document.querySelectorAll('[id^="facture_produitFacture_"][id$="_tva"]');
-			quantiteInputs.forEach(input => {
-				input.addEventListener('input', updateMontantTotal);
-			});
+const item = document.createElement('li');
+item.innerHTML = collectionHolder.dataset.prototype.replace(/__name__/g, collectionHolder.dataset.index);
 
-			prixHtInputs.forEach(input => {
-				input.addEventListener('input', updateMontantTotal);
-			});
+ul.appendChild(item);
+collectionHolder.appendChild(ul);
 
-			tvaInputs.forEach(input => {
-				input.addEventListener('input', updateMontantTotal);
-			});
+const elements = ul.querySelectorAll('[id^="facture_produitFacture_"]');
+elements.forEach(element => {
+element.classList.add('flex', 'flex-row', 'gap-x-2', 'sm:col-span-4', 'flex-1', 'w-full', 'justify-between');
+});
 
-			collectionHolder.dataset.index++;
-		};
+collectionHolder.dataset.index ++;
+
+const quantiteInputs = document.querySelectorAll('[id^="facture_produitFacture_"][id$="_quantity"]');
+const prixHtInputs = document.querySelectorAll('[id^="facture_produitFacture_"][id$="_price"]');
+const tvaInputs = document.querySelectorAll('[id^="facture_produitFacture_"][id$="_tva"]');
+updateMontantTotal();
+
+quantiteInputs.forEach(input => {
+input.addEventListener('change', updateMontantTotal);
+});
+
+prixHtInputs.forEach(input => {
+input.addEventListener('change', updateMontantTotal);
+});
+
+tvaInputs.forEach(input => {
+input.addEventListener('change', updateMontantTotal);
+});
 
 
-		document.querySelectorAll('.add_item_link').forEach(btn => {
-			btn.addEventListener("click", addFormToCollection)
-		});
+addTagFormDeleteLink(item);
+
+};
 
 
-		const montantInput = document.getElementById('facture_montant');
+document.querySelectorAll('.add_item_link').forEach(btn => {
+btn.addEventListener("click", addFormToCollection)
+});
 
-		function updateMontantTotal() {
-			const quantiteInputs = document.querySelectorAll('[id^="facture_produitFacture_"][id$="_quantity"]');
-			const prixHtInputs = document.querySelectorAll('[id^="facture_produitFacture_"][id$="_price"]');
-			const tvaInputs = document.querySelectorAll('[id^="facture_produitFacture_"][id$="_tva"]');
-			quantiteInputs.forEach(input => {
-				input.addEventListener('input', updateMontantTotal);
-			});
+document.querySelectorAll('.produitFactureLine').forEach((tag) => {
+addTagFormDeleteLink(tag)
+})
 
-			prixHtInputs.forEach(input => {
-				input.addEventListener('input', updateMontantTotal);
-			});
+const montantInput = document.getElementById('facture_montant');
 
-			tvaInputs.forEach(input => {
-				input.addEventListener('input', updateMontantTotal);
-			});
-			let montantTotal = 0;
+function updateMontantTotal() {
+const quantiteInputs = document.querySelectorAll('[id^="facture_produitFacture_"][id$="_quantity"]');
+const prixHtInputs = document.querySelectorAll('[id^="facture_produitFacture_"][id$="_price"]');
+const tvaInputs = document.querySelectorAll('[id^="facture_produitFacture_"][id$="_tva"]');
+quantiteInputs.forEach(input => {
+input.addEventListener('change', updateMontantTotal);
+});
 
-			for (let i = 0; i < quantiteInputs.length; i++) {
-				const quantite = parseFloat(quantiteInputs[i].value);
-				const prixHt = parseFloat(prixHtInputs[i].value);
-				const tva = parseFloat(tvaInputs[i].value);
+prixHtInputs.forEach(input => {
+input.addEventListener('change', updateMontantTotal);
+});
 
-				let montantProduit = quantite * prixHt;
+tvaInputs.forEach(input => {
+input.addEventListener('change', updateMontantTotal);
+});
+let montantTotal = 0;
 
-				if (!isNaN(tva)) {
-					montantProduit += montantProduit * (tva / 100);
-				}
+for (let i = 0; i < quantiteInputs.length; i++) {
+const quantite = parseFloat(quantiteInputs[i].value);
+const prixHt = parseFloat(prixHtInputs[i].value);
+const tva = parseFloat(tvaInputs[i].value);
 
-				montantTotal += montantProduit;
-			}
+let montantProduit = quantite * prixHt;
 
-			if (!isNaN(montantTotal)) {
-				montantInput.value = montantTotal.toFixed(2);
-			}
-		}
+if (!isNaN(tva)) {
+montantProduit += montantProduit * (tva / 100);
+}
 
-		updateMontantTotal();
+montantTotal += montantProduit;
+}
+
+if (!isNaN(montantTotal)) {
+montantInput.value = montantTotal.toFixed(2);
+}
+}
+
+updateMontantTotal();
 	</script>
 {% endblock %}

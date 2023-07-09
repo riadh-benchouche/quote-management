@@ -14,6 +14,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
 
 use Symfony\Component\HttpKernel\KernelInterface;
 
@@ -134,8 +136,15 @@ class DevisController extends AbstractController
 
 
     #[Route('/{id}/edit', name: 'app_devis_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Devis $devi, DevisRepository $devisRepository): Response
+    public function edit(Request $request, Devis $devi, DevisRepository $devisRepository, EntityManagerInterface $entityManager): Response
     {
+        $originalProduitDevis = new ArrayCollection();
+
+        // Create an ArrayCollection of the current Tag objects in the database
+        foreach ($devi->getProduitDevis() as $produitDevis) {
+            $originalProduitDevis->add($produitDevis);
+        }
+
         $form = $this->createForm(DevisType::class, $devi);
         $form->handleRequest($request);
 
@@ -145,8 +154,21 @@ class DevisController extends AbstractController
             }
             $devisRepository->save($devi, true);
 
+            // Supprimer les ProduitDevis qui ne sont plus associés au Devis
+            foreach ($originalProduitDevis as $produitDevis) {
+                if (!$devi->getProduitDevis()->contains($produitDevis)) {
+                    $devi->getProduitDevis()->removeElement($produitDevis);
+                    $entityManager->remove($produitDevis);
+                }
+            }
+
+            $entityManager->persist($devi);
+            $entityManager->flush();
+
             return $this->redirectToRoute('back_app_devis_index', [], Response::HTTP_SEE_OTHER);
         }
+
+
 
         return $this->renderForm('back/devis/edit.html.twig', [
             'devi' => $devi,

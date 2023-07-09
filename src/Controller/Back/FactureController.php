@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Service\PdfService;
 use App\Service\MailerService;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[Route('/facture')]
 class FactureController extends AbstractController
@@ -128,16 +130,34 @@ class FactureController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_facture_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Facture $facture, FactureRepository $factureRepository): Response
+    public function edit(Request $request, Facture $facture, FactureRepository $factureRepository, EntityManagerInterface $entityManager): Response
     {
+        $originalProduitFacture = new ArrayCollection();
+
+        // Create an ArrayCollection of the current Tag objects in the database
+        foreach ($facture->getProduitFacture() as $produitFacture) {
+            $originalProduitFacture->add($produitFacture);
+        }
+
         $form = $this->createForm(FactureType::class, $facture);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($form->isSubmitted()) {
             foreach ($facture->getProduitFacture() as $produitFacture) {
                 $produitFacture->setFacture($facture);
             }
             $factureRepository->save($facture, true);
+
+            // Supprimer les ProduitDevis qui ne sont plus associés au Devis
+            foreach ($originalProduitFacture as $produitFacture) {
+                if (!$facture->getProduitFacture()->contains($produitFacture)) {
+                    $facture->getProduitFacture()->removeElement($produitFacture);
+                    $entityManager->remove($produitFacture);
+                }
+            }
+
+            $entityManager->persist($facture);
+            $entityManager->flush();
 
             return $this->redirectToRoute('back_app_facture_index', [], Response::HTTP_SEE_OTHER);
         }
