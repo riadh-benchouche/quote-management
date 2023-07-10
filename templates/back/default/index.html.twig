@@ -3,5 +3,143 @@
 {% block title %}Administration{% endblock %}
 
 {% block main %}
-    Administration
+    <div>
+        <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+            <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                <dt class="truncate text-sm font-medium text-primary">Total Factures</dt>
+                <dd class="mt-1 text-3xl font-semibold tracking-tight text-secondary">{{ totalFactures }}</dd>
+            </div>
+            <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                <dt class="truncate text-sm font-medium text-primary">Total Devis</dt>
+                <dd class="mt-1 text-3xl font-semibold tracking-tight text-secondary">{{ totalDevis }}</dd>
+            </div>
+            <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                <dt class="truncate text-sm font-medium text-primary">Total Utilisateurs</dt>
+                <dd class="mt-1 text-3xl font-semibold tracking-tight text-secondary">{{ totalUsers }}</dd>
+            </div>
+        </dl>
+    </div>
+    <div class="flex flex-col md:flex-row w-full gap-6">
+        <div class="mt-8 flow-root w-full">
+            <h1 class="text-lg font-semibold text-gray-900 mb-3">Les 5 dernières devis</h1>
+            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                    <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-300 px-3">
+                            <thead class="bg-secondary">
+                            <tr>
+                                <th scope="col" class="py-3.5 px-3 text-left text-sm font-semibold text-white">
+                                    Numéro
+                                </th>
+
+                                <th scope="col" class="py-3.5 px-3 text-left text-sm font-semibold text-white">
+                                    Client
+                                </th>
+
+                                <th scope="col" class="py-3.5 px-3 text-left text-sm font-semibold text-white">
+                                    Date
+                                </th>
+
+                                <th scope="col" class="py-3.5 px-3 text-left text-sm font-semibold text-white">
+                                    Total
+                                </th>
+
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">
+                                    Statut
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                            {% for devi in devis %}
+                                <tr>
+                                    <td class="whitespace-nowrap py-4 px-4 text-sm font-medium text-gray-900">{{ devi.id }}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ devi.client }}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ devi.date ? devi.date|date('Y-m-d') : '' }}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ devi.montant }}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm">
+                                        {% set statusClasses = {
+                                            'draft': 'bg-gray-50 text-gray-600 ring-gray-500/10',
+                                            'accepted': 'bg-green-50 text-green-700 ring-green-600/10',
+                                            'rejected': 'bg-red-50 text-red-700 ring-red-600/10',
+                                            'invoiced': 'bg-blue-50 text-blue-700 ring-blue-700/10'
+                                        } %}
+                                        {% if statusClasses[devi.status] is defined %}
+                                            <span class="{{ statusClasses[devi.status] }} inline-flex items-center rounded-md px-2 py-1 text-base font-medium ring-1 ring-inset capitalize">
+												{{ devi.status }}
+											</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="9">Aucun devis trouvé</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="mt-8 flow-root w-full">
+            <h1 class="text-lg font-semibold text-gray-900 mb-3">Les 5 dernières factures</h1>
+            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                    <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-300 px-3">
+                            <thead class="bg-secondary">
+                            <tr>
+                                <th scope="col" class="py-3.5 px-3 text-left text-sm font-semibold text-white">
+                                    Numéro
+                                </th>
+
+                                <th scope="col" class="py-3.5 px-3 text-left text-sm font-semibold text-white">
+                                    Client
+                                </th>
+
+                                <th scope="col" class="py-3.5 px-3 text-left text-sm font-semibold text-white">
+                                    Date
+                                </th>
+
+                                <th scope="col" class="py-3.5 px-3 text-left text-sm font-semibold text-white">
+                                    Total
+                                </th>
+
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-white">
+                                    Statut
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-200">
+                            {% for facture in factures %}
+                                <tr>
+                                    <td class="whitespace-nowrap py-4 px-4 text-sm font-medium text-gray-900">{{ facture.id }}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ facture.client }}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ facture.date ? facture.date|date('Y-m-d') : '' }}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{{ facture.montant }}</td>
+                                    <td class="whitespace-nowrap px-3 py-4 text-sm">
+                                        {% set statusClasses = {
+                                            'draft': 'bg-gray-50 text-gray-600 ring-gray-500/10',
+                                            'paid': 'bg-green-50 text-green-700 ring-green-600/10',
+                                            'unpaid': 'bg-red-50 text-red-700 ring-red-600/10',
+                                        } %}
+                                        {% if statusClasses[facture.status] is defined %}
+                                            <span class="{{ statusClasses[facture.status] }} inline-flex items-center rounded-md px-2 py-1 text-base font-medium ring-1 ring-inset capitalize">
+												{{ facture.status }}
+											</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td colspan="9">Aucun devis trouvé</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
