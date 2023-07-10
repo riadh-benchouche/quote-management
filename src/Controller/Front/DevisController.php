@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Back;
+namespace App\Controller\Front;
 
 use App\Entity\Devis;
 use App\Entity\ProduitDevis;
@@ -37,7 +37,7 @@ class DevisController extends AbstractController
             $request->query->getInt('page', 1),
             10
         );
-        return $this->render('back/devis/index.html.twig', [
+        return $this->render('front/devis/index.html.twig', [
             'devis' => $devis,
             'sort_order' => $sortOrder,
         ]);
@@ -58,10 +58,10 @@ class DevisController extends AbstractController
             }
             $devisRepository->save($devi, true);
 
-            return $this->redirectToRoute('back_app_devis_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('front_app_devis_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('back/devis/new.html.twig', [
+        return $this->renderForm('front/devis/new.html.twig', [
             'devi' => $devi,
             'form' => $form,
         ]);
@@ -70,7 +70,7 @@ class DevisController extends AbstractController
     #[Route('/{id}', name: 'app_devis_show', methods: ['GET'])]
     public function show(Devis $devi): Response
     {
-        return $this->render('back/devis/show.html.twig', [
+        return $this->render('front/devis/show.html.twig', [
             'devi' => $devi,
         ]);
     }
@@ -78,7 +78,7 @@ class DevisController extends AbstractController
     #[Route('/devis-pdf/{id}', name: 'app_devis_pdf', methods: ['GET'])]
     public function showPdf(Devis $devi, PdfService $pdf): Response
     {
-        $html = $this->renderView('back/devis/showPdf.html.twig', [
+        $html = $this->renderView('front/devis/showPdf.html.twig', [
             'devi' => $devi,
         ]);
 
@@ -95,7 +95,7 @@ class DevisController extends AbstractController
     public function downloadPdf(Devis $devi, PdfService $pdfService): Response
     {
         // Générer le contenu HTML du devis
-        $html = $this->renderView('back/devis/showPdf.html.twig', [
+        $html = $this->renderView('front/devis/showPdf.html.twig', [
             'devi' => $devi,
         ]);
 
@@ -108,7 +108,7 @@ class DevisController extends AbstractController
     #[Route('/send-mail-pdf/{id}', name: 'app_devis_send_mail', methods: ['GET'])]
     public function sendMailPdf(Devis $devi, PdfService $pdfService, MailerService $mailer): Response
     {
-        $html = $this->renderView('back/devis/showPdf.html.twig', [
+        $html = $this->renderView('front/devis/showPdf.html.twig', [
             'devi' => $devi,
         ]);
 
@@ -131,7 +131,7 @@ class DevisController extends AbstractController
         // Supprimer le fichier PDF temporaire
         unlink($temporaryFilePath);
 
-        return $this->redirectToRoute('back_app_devis_show', ['id' => $devi->getId(), 'msg' => "Mail envoyé avec succès!"]);
+        return $this->redirectToRoute('front_app_devis_show', ['id' => $devi->getId(), 'msg' => "Mail envoyé avec succès!"]);
     }
 
 
@@ -165,12 +165,12 @@ class DevisController extends AbstractController
             $entityManager->persist($devi);
             $entityManager->flush();
 
-            return $this->redirectToRoute('back_app_devis_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('front_app_devis_index', [], Response::HTTP_SEE_OTHER);
         }
 
 
 
-        return $this->renderForm('back/devis/edit.html.twig', [
+        return $this->renderForm('front/devis/edit.html.twig', [
             'devi' => $devi,
             'form' => $form,
         ]);
@@ -183,6 +183,21 @@ class DevisController extends AbstractController
             $devisRepository->remove($devi, true);
         }
 
-        return $this->redirectToRoute('back_app_devis_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('front_app_devis_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/devi/{id}/update-status', name: 'app_devis_update_status', methods: ['POST'])]
+    public function updateStatus(Request $request, Devis $devis, EntityManagerInterface $entityManager)
+    {
+        $newStatus = $request->request->get('status');
+
+        // Mettre à jour le statut de la facture
+        $devis->setStatus($newStatus);
+
+        // Enregistrer les modifications dans la base de données
+        $entityManager->flush();
+
+        // Rediriger vers la page de détails de la facture
+        return $this->redirectToRoute('front_app_devis_show', ['id' => $devis->getId()]);
     }
 }

@@ -1,25 +1,27 @@
 <?php
 
-namespace App\Controller\Back;
+namespace App\Controller\Front;
 
 use App\Entity\Client;
-use App\Entity\Devis;
 use App\Form\ClientType;
 use App\Repository\ClientRepository;
 use App\Repository\DevisRepository;
 use App\Repository\FactureRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[IsGranted('ROLE_EMPLOYEE')]
 #[Route('/client')]
 class ClientController extends AbstractController
 {
     #[Route('/', name: 'app_client_index', methods: ['GET'])]
     public function index(ClientRepository $clientRepository): Response
     {
-        return $this->render('back/client/index.html.twig', [
+        return $this->render('front/client/index.html.twig', [
             'clients' => $clientRepository->findAll(),
         ]);
     }
@@ -34,10 +36,10 @@ class ClientController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $clientRepository->save($client, true);
 
-            return $this->redirectToRoute('back_app_client_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('front_app_client_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('back/client/new.html.twig', [
+        return $this->renderForm('front/client/new.html.twig', [
             'client' => $client,
             'form' => $form,
         ]);
@@ -48,7 +50,7 @@ class ClientController extends AbstractController
     {
         $devis = $devisRepository->findBy(['client' => $client->getId()]);
         $facture = $factureRepository->findBy(['client' => $client->getId()]);
-        return $this->render('back/client/show.html.twig', [
+        return $this->render('front/client/show.html.twig', [
             'client' => $client,
             'devis' => $devis,
             'factures' => $facture
@@ -64,10 +66,10 @@ class ClientController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $clientRepository->save($client, true);
 
-            return $this->redirectToRoute('back_app_client_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('front_app_client_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('back/client/edit.html.twig', [
+        return $this->renderForm('front/client/edit.html.twig', [
             'client' => $client,
             'form' => $form,
         ]);
@@ -80,6 +82,6 @@ class ClientController extends AbstractController
             $clientRepository->remove($client, true);
         }
 
-        return $this->redirectToRoute('back_app_client_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('front_app_client_index', [], Response::HTTP_SEE_OTHER);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Back;
+namespace App\Controller\Front;
 
 use App\Entity\Facture;
 use App\Form\FactureType;
@@ -34,7 +34,7 @@ class FactureController extends AbstractController
             10
         );
 
-        return $this->render('back/facture/index.html.twig', [
+        return $this->render('front/facture/index.html.twig', [
             'factures' => $factures,
             'sort_order' => $sortOrder,
         ]);
@@ -53,10 +53,10 @@ class FactureController extends AbstractController
             }
             $factureRepository->save($facture, true);
 
-            return $this->redirectToRoute('back_app_facture_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('front_app_facture_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('back/facture/new.html.twig', [
+        return $this->renderForm('front/facture/new.html.twig', [
             'facture' => $facture,
             'form' => $form,
         ]);
@@ -65,7 +65,7 @@ class FactureController extends AbstractController
     #[Route('/{id}', name: 'app_facture_show', methods: ['GET'])]
     public function show(Facture $facture): Response
     {
-        return $this->render('back/facture/show.html.twig', [
+        return $this->render('front/facture/show.html.twig', [
             'facture' => $facture,
         ]);
     }
@@ -73,7 +73,7 @@ class FactureController extends AbstractController
     #[Route('/facture-pdf/{id}', name: 'app_facture_pdf', methods: ['GET'])]
     public function showPdf(Facture $facture, PdfService $pdf): Response
     {
-        $html = $this->renderView('back/facture/showPdf.html.twig', [
+        $html = $this->renderView('front/facture/showPdf.html.twig', [
             'facture' => $facture,
         ]);
 
@@ -90,7 +90,7 @@ class FactureController extends AbstractController
     public function downloadPdf(Facture $facture, PdfService $pdfService): Response
     {
         // Générer le contenu HTML du devis
-        $html = $this->renderView('back/facture/showPdf.html.twig', [
+        $html = $this->renderView('front/facture/showPdf.html.twig', [
             'facture' => $facture,
         ]);
 
@@ -103,7 +103,7 @@ class FactureController extends AbstractController
     #[Route('/send-mail-pdf/{id}', name: 'app_facture_send_mail', methods: ['GET'])]
     public function sendMailPdf(Facture $facture, PdfService $pdfService, MailerService $mailer): Response
     {
-        $html = $this->renderView('back/facture/showPdf.html.twig', [
+        $html = $this->renderView('front/facture/showPdf.html.twig', [
             'facture' => $facture,
         ]);
 
@@ -126,7 +126,7 @@ class FactureController extends AbstractController
         // Supprimer le fichier PDF temporaire
         unlink($temporaryFilePath);
 
-        return $this->redirectToRoute('back_app_facture_show', ['id' => $facture->getId(), 'msg' => "Mail envoyé avec succès!"]);
+        return $this->redirectToRoute('front_app_facture_show', ['id' => $facture->getId(), 'msg' => "Mail envoyé avec succès!"]);
     }
 
     #[Route('/{id}/edit', name: 'app_facture_edit', methods: ['GET', 'POST'])]
@@ -159,10 +159,10 @@ class FactureController extends AbstractController
             $entityManager->persist($facture);
             $entityManager->flush();
 
-            return $this->redirectToRoute('back_app_facture_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('front_app_facture_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('back/facture/edit.html.twig', [
+        return $this->renderForm('front/facture/edit.html.twig', [
             'facture' => $facture,
             'form' => $form,
         ]);
@@ -175,6 +175,21 @@ class FactureController extends AbstractController
             $factureRepository->remove($facture, true);
         }
 
-        return $this->redirectToRoute('back_app_facture_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('front_app_facture_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    #[Route('/facture/{id}/update-status', name: 'app_facture_update_status', methods: ['POST'])]
+    public function updateStatus(Request $request, Facture $facture, EntityManagerInterface $entityManager)
+    {
+        $newStatus = $request->request->get('status');
+
+        // Mettre à jour le statut de la facture
+        $facture->setStatus($newStatus);
+
+        // Enregistrer les modifications dans la base de données
+        $entityManager->flush();
+
+        // Rediriger vers la page de détails de la facture
+        return $this->redirectToRoute('front_app_facture_show', ['id' => $facture->getId()]);
     }
 }

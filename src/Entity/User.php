@@ -19,7 +19,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use TimestampableTrait;
 
-    // private ?string $plainPassword;
+    private ?string $plainPassword;
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -132,7 +132,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 
     public function getLastname(): ?string
@@ -216,18 +216,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     //     return $this;
     // }
 
-    // public function setPlainPassword(?string $plainPassword)
-    // {
-    //     $this->plainPassword = $plainPassword;
-    //     // forces the object to look "dirty" to Doctrine. Avoids
-    //     // Doctrine *not* saving this entity, if only plainPassword changes
-    //     $this->password = null;
-    // }
+    public function setPlainPassword(?string $plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
 
-    // public function getPlainPassword(): ?string
-    // {
-    //     return $this->plainPassword;
-    // }
+        return $this;
+        // if ($plainPassword) {
+        //     $this->password = password_hash($plainPassword, PASSWORD_BCRYPT);
+        // }
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
 
 
     public function getAdress(): ?string

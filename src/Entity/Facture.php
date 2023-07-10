@@ -170,4 +170,9 @@ class Facture
 
         return $this;
     }
+
+    public function removeProduit(ProduitFacture $produitFacture): void
+    {
+        $this->produitFacture->removeElement($produitFacture);
+    }
 }
