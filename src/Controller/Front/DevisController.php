@@ -185,4 +185,19 @@ class DevisController extends AbstractController
 
         return $this->redirectToRoute('front_app_devis_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/devi/{id}/update-status', name: 'app_devis_update_status', methods: ['POST'])]
+    public function updateStatus(Request $request, Devis $devis, EntityManagerInterface $entityManager)
+    {
+        $newStatus = $request->request->get('status');
+
+        // Mettre à jour le statut de la facture
+        $devis->setStatus($newStatus);
+
+        // Enregistrer les modifications dans la base de données
+        $entityManager->flush();
+
+        // Rediriger vers la page de détails de la facture
+        return $this->redirectToRoute('front_app_devis_show', ['id' => $devis->getId()]);
+    }
 }

@@ -177,4 +177,19 @@ class FactureController extends AbstractController
 
         return $this->redirectToRoute('front_app_facture_index', [], Response::HTTP_SEE_OTHER);
     }
+
+    #[Route('/facture/{id}/update-status', name: 'app_facture_update_status', methods: ['POST'])]
+    public function updateStatus(Request $request, Facture $facture, EntityManagerInterface $entityManager)
+    {
+        $newStatus = $request->request->get('status');
+
+        // Mettre à jour le statut de la facture
+        $facture->setStatus($newStatus);
+
+        // Enregistrer les modifications dans la base de données
+        $entityManager->flush();
+
+        // Rediriger vers la page de détails de la facture
+        return $this->redirectToRoute('front_app_facture_show', ['id' => $facture->getId()]);
+    }
 }
