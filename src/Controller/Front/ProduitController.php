@@ -5,11 +5,13 @@ namespace App\Controller\Front;
 use App\Entity\Produit;
 use App\Form\ProduitType;
 use App\Repository\ProduitRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[IsGranted('ROLE_EMPLOYEE')]
 #[Route('/produit')]
 class ProduitController extends AbstractController
 {
