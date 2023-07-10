@@ -1,0 +1,149 @@
+{% extends 'partials/layout.html.twig' %}
+
+{% block title %}Client
+{% endblock %}
+
+{% block main %}
+	<div class="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+		<div class="shadow-sm ring-1 ring-gray-900/5 sm:mx-0 sm:rounded-lg sm:px-8 sm:pb-14 lg:col-span-2 lg:row-span-2 lg:row-end-2 xl:px-16 xl:pb-20">
+			<dl class="flex flex-1 justify-between text-sm ">
+					<div class="mt-6 pt-6 sm:pr-4">
+						<dt class="font-semibold text-gray-900">{{ client.companyName }}</dt>
+						<dt class="font-semibold text-gray-900">{{ client.lastname }}
+							{{ client.firstname }}</dt>
+						<dd class="mt-2 text-gray-500"><span>{{ client.address }}</span><br>{{ client.zipcode }}
+							{{ client.city }}<br>{{ client.phone }}
+							<br>{{ client.email }}</dd>
+					</div>
+					<div class="mt-6 pt-6 sm:pr-4 flex flex-col space-y-3">
+						<a href="{{ path('front_app_client_index') }}" type="button" class="inline-flex items-center gap-x-1.5 rounded-md bg-gray-100 px-3 py-2 text-sm font-semibold text-primary shadow-sm hover:bg-gray-200">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="-ml-0.5 h-5 w-5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M11.25 9l-3 3m0 0l3 3m-3-3h7.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+							</svg>
+							Revenir à la liste
+						</a>
+						<a href="{{ path('front_app_client_edit', {'id': client.id}) }}" type="button" class="inline-flex items-center gap-x-1.5 rounded-md bg-orange-600 px-3 py-2 text-sm font-semibold text-white shadow-sm">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="-ml-0.5 h-5 w-5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" />
+							</svg>
+							Modifier
+						</a>
+						{{ include('front/client/_delete_form.html.twig') }}
+					</div>
+			</dl>
+
+			<div class="relative">
+				<div class="absolute inset-0 flex items-center" aria-hidden="true">
+					<div class="w-full border-t border-gray-300"></div>
+				</div>
+				<div class="relative flex justify-center">
+					<span class="bg-white px-3 py-10 text-base font-semibold leading-6 text-gray-900">Devis</span>
+				</div>
+			</div>
+
+			<table class="w-full whitespace-nowrap text-left text-sm leading-6">
+				<colgroup>
+					<col class="w-full">
+					<col>
+					<col>
+					<col>
+				</colgroup>
+				<thead class="border-b border-gray-200 text-gray-900">
+				<tr>
+					<th scope="col" class="px-0 py-3 font-semibold">Devis</th>
+					<th scope="col" class="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell">Date</th>
+					<th scope="col" class="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell">Montant</th>
+					<th scope="col" class="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell">Status</th>
+					<th scope="col" class="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell">Voir</th>
+				</tr>
+				</thead>
+				<tbody>
+				{% for devi in devis %}
+					<tr class="border-b border-gray-100">
+						<td class="max-w-0 px-0 py-5 align-top">
+							<div class="truncate font-medium text-gray-900">{{ devi.id }}</div>
+						</td>
+						<td class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell">{{ devi.date ? devi.date|date('Y-m-d') : '' }}</td>
+						<td class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell">{{ devi.montant }}</td>
+						<td class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell">
+							{% set statusClasses = {
+								'draft': 'bg-gray-50 text-gray-600 ring-gray-500/10',
+								'accepted': 'bg-green-50 text-green-700 ring-green-600/10',
+								'rejected': 'bg-red-50 text-red-700 ring-red-600/10',
+								'invoiced': 'bg-blue-50 text-blue-700 ring-blue-700/10'
+							} %}
+							{% if statusClasses[devi.status] is defined %}
+								<span class="{{ statusClasses[devi.status] }} inline-flex items-center rounded-md px-2 py-1 text-base font-medium ring-1 ring-inset capitalize">
+												{{ devi.status }}
+								</span>
+							{% endif %}
+						</td>
+						<td class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell">
+							<a href="{{ path('front_app_devis_show', {'id': devi.id}) }}" class="text-primary">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9zm3.75 11.625a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
+								</svg>
+							</a>
+						</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+			<div class="relative">
+				<div class="absolute inset-0 flex items-center" aria-hidden="true">
+					<div class="w-full border-t border-gray-300"></div>
+				</div>
+				<div class="relative flex justify-center">
+					<span class="bg-white px-3 py-10 text-base font-semibold leading-6 text-gray-900">Factures</span>
+				</div>
+			</div>
+			<table class="w-full whitespace-nowrap text-left text-sm leading-6">
+				<colgroup>
+					<col class="w-full">
+					<col>
+					<col>
+					<col>
+				</colgroup>
+				<thead class="border-b border-gray-200 text-gray-900">
+				<tr>
+					<th scope="col" class="px-0 py-3 font-semibold">Facture</th>
+					<th scope="col" class="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell">Date</th>
+					<th scope="col" class="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell">Montant</th>
+					<th scope="col" class="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell">Status</th>
+					<th scope="col" class="hidden py-3 pl-8 pr-0 text-right font-semibold sm:table-cell">Voir</th>
+				</tr>
+				</thead>
+				<tbody>
+				{% for facture in factures %}
+					<tr class="border-b border-gray-100">
+						<td class="max-w-0 px-0 py-5 align-top">
+							<div class="truncate font-medium text-gray-900">{{ facture.id }}</div>
+						</td>
+						<td class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell">{{ facture.date ? facture.date|date('Y-m-d') : '' }}</td>
+						<td class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell">{{ facture.montant }}</td>
+						<td class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell">
+							{% set statusClasses = {
+								'draft': 'bg-gray-50 text-gray-600 ring-gray-500/10',
+								'paid': 'bg-green-50 text-green-700 ring-green-600/10',
+								'unpaid': 'bg-red-50 text-red-700 ring-red-600/10',
+							} %}
+							{% if statusClasses[facture.status] is defined %}
+								<span class="{{ statusClasses[facture.status] }} inline-flex items-center rounded-md px-2 py-1 text-base font-medium ring-1 ring-inset capitalize">
+												{{ facture.status }}
+											</span>
+							{% endif %}
+						</td>
+						<td class="hidden py-5 pl-8 pr-0 text-right align-top tabular-nums text-gray-700 sm:table-cell">
+							<a href="{{ path('front_app_facture_show', {'id': facture.id}) }}" class="text-primary">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9zm3.75 11.625a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
+								</svg>
+							</a>
+						</td>
+					</tr>
+				{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
+{% endblock %}
