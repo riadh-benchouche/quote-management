@@ -14,6 +14,15 @@
 
 	{{ form_start(form) }}
 	{{ form_widget(form) }}
+	{% if is_granted('ROLE_ADMIN') %}
+		<div class="sm:col-span-4 flex flex-1 w-full justify-between gap-6">
+			<div class="w-full">
+				{{ form_label(form.roles, 'Role', {'label_attr': {'class': 'block w-full text-sm font-medium leading-6 text-gray-900'}}) }}
+				{{ form_widget(form.roles, {'attr': {'class': ' w-full flex rounded-md'}}) }}
+				{{ form_errors(form.roles, {'attr': {'class': 'text-sm text-red-600'}}) }}
+			</div>
+		</div>
+	{% endif %}
 	<button type="submit">Enregistrer</button>
 	{{ form_end(form) }}
 {% endblock %}

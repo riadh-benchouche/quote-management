@@ -36,25 +36,6 @@
 				</a>
 
 				<!-- Ajout du select pour changer le statut -->
-				<div class="mt-6 border-t border-gray-900/5 pt-6">
-					<form action="{{ path('front_app_devis_update_status', {'id': devi.id}) }}" method="post">
-						<label for="status" class="block text-sm font-medium text-gray-700">Modifier statut</label>
-						<div class="mt-1 sm:w-1/2">
-							<select id="status" name="status" class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
-								<option value="draft" {% if devi.status == 'draft' %} selected {% endif %}>En attente</option>
-								<option value="invoiced" {% if devi.status == 'invoiced' %} selected {% endif %}>Facturé</option>
-								<option value="rejected" {% if devi.status == 'rejected' %} selected {% endif %}>Rejetée</option>
-								<option value="accepted" {% if devi.status == 'accepted' %} selected {% endif %}>Acceptée</option>
-							</select>
-						</div>
-						<button type="submit" class="mt-4 inline-flex items-center gap-x-1.5 rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm">
-							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor" class="-ml-0.5 h-5 w-5">
-								<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
-							</svg>
-							Modifier statut
-						</button>
-					</form>
-				</div>
 			</div>
 		</div>
 		<div
@@ -101,6 +82,24 @@
 						<a href="{{ path('front_app_devis_download', {'id': devi.id}) }}" class="text-sm font-semibold leading-6 text-gray-900">Télécharger le devis
 							<span aria-hidden="true">&rarr;</span>
 						</a>
+					</div>
+					<div class="pb-6 ml-5">
+						<form action="{{ path('front_app_devis_update_status', {'id': devi.id}) }}" method="post" class="flex gap-x-4">
+							<div class="mt-1 sm:w-1/2">
+								<select id="status" name="status" class="block w-full py-2 px-3 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-primary focus:border-primary sm:text-sm">
+									<option value="draft" {% if devi.status == 'draft' %} selected {% endif %}>En attente</option>
+									<option value="invoiced" {% if devi.status == 'invoiced' %} selected {% endif %}>Facturé</option>
+									<option value="rejected" {% if devi.status == 'rejected' %} selected {% endif %}>Rejetée</option>
+									<option value="accepted" {% if devi.status == 'accepted' %} selected {% endif %}>Acceptée</option>
+								</select>
+							</div>
+							<button type="submit" class="mt-1 inline-flex items-center gap-x-1.5 rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentColor" class="-ml-0.5 h-5 w-5">
+									<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+								</svg>
+								Modifier statut
+							</button>
+						</form>
 					</div>
 				</div>
 			</div>
