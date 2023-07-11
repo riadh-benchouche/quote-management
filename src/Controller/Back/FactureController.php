@@ -5,6 +5,7 @@ namespace App\Controller\Back;
 use App\Entity\Facture;
 use App\Form\FactureType;
 use App\Repository\FactureRepository;
+use App\Repository\ProduitFactureRepository;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +20,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class FactureController extends AbstractController
 {
     #[Route('/', name: 'app_facture_index', methods: ['GET'])]
-    public function index(Request $request, FactureRepository $factureRepository,  PaginatorInterface $paginator): Response
+    public function index(Request $request, FactureRepository $factureRepository, PaginatorInterface $paginator): Response
     {
 
         $sortBy = $request->query->get('_sort_by', 'id');
@@ -174,7 +175,6 @@ class FactureController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $facture->getId(), $request->request->get('_token'))) {
             $factureRepository->remove($facture, true);
         }
-
         return $this->redirectToRoute('back_app_facture_index', [], Response::HTTP_SEE_OTHER);
     }
 }

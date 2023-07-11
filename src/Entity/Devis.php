@@ -31,7 +31,7 @@ class Devis
     private ?float $montant = null;
 
     #[ORM\Column(length: 50, options: ["default" => "brouillon"])]
-    #[Assert\Choice(message: 'Le status du devis doit être défini')]
+    #[Assert\NotBlank(message: 'Le champ status du devis est obligatoire')]
     private ?string $status = null;
 
     #[ORM\ManyToOne(inversedBy: 'devis')]
@@ -42,7 +42,7 @@ class Devis
     #[ORM\OneToMany(mappedBy: 'devis', targetEntity: Facture::class)]
     private Collection $factures;
 
-    #[ORM\OneToMany(mappedBy: 'devis', targetEntity: ProduitDevis::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'devis', targetEntity: ProduitDevis::class, cascade: ['persist', 'remove'])]
     private Collection $produitDevis;
 
     public function __construct()
