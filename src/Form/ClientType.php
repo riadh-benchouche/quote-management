@@ -36,7 +36,6 @@ class ClientType extends AbstractType
             ->add('phone',null,[
                 'required' => true,
             ])
-
         ;
     }
 

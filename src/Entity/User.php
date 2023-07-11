@@ -28,6 +28,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     #[Assert\Email(message: 'Cette adresse mail "{{ value }}" n\'est pas valide.')]
+    #[Assert\Unique(message: 'L\'adresse e-mail est déjà utilisée.')]
     private ?string $email = null;
 
     #[ORM\Column]

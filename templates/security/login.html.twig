@@ -21,10 +21,6 @@
                 <div class="mt-10">
                     <div>
                         <form method="POST" class="space-y-6">
-                            {% if error %}
-                                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-                            {% endif %}
-
                             {% if app.user %}
                                 <div class="mb-3">
                                     Tu es connecté en tant que

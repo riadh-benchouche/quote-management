@@ -23,6 +23,7 @@ class Client
 
     #[ORM\Column(length: 100, nullable: true)]
     #[Assert\Email(message: 'L\'adresse e-mail n\'est pas valide.')]
+    #[Assert\Unique(message: 'L\'adresse e-mail est déjà utilisée.')]
     #[Assert\Length(max: 100, maxMessage: 'L\'adresse e-mail ne peut pas dépasser 100 caractères.')]
     private ?string $email = null;
 

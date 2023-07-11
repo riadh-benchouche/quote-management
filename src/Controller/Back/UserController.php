@@ -66,6 +66,7 @@ class UserController extends AbstractController
                 'lastname' => $user->getLastname(),
                 'firstname' => $user->getFirstname(),
                 'email' => $user->getEmail(),
+                'roles' => $user->getRoles()[0]
             ],
         ]);
         $form->setData($user); // Associer les données de l'entité User au formulaire
@@ -97,11 +98,12 @@ class UserController extends AbstractController
             $user->setLastname($form->get('lastname')->getData());
             $user->setFirstname($form->get('firstname')->getData());
             $user->setEmail($form->get('email')->getData());
+            $user->setRoles([$form->get('roles')->getData()]);
 
             $manager->persist($user);
             $manager->flush();
 
-            return $this->redirectToRoute('back_app_user_edit', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('back_app_user_index', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('back/user/edit.html.twig', [
